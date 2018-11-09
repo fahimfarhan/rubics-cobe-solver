@@ -1,0 +1,1907 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+RubicsCubeProject.com -- emu8086 assembler version: 4.08  
+ 
+[ 12/13/2016  --  01:36:33 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       ORG 100H
+[   2]        :                                       .STACK 100H
+[   3]        :                                       .MODEL SMALL
+[   4]    0100: E9 53 02                              .DATA
+[   5]        :                                       
+[   6]    0103: 52 00 4F 00 57 00 59 00               UP 	  DW 'R','O','W','Y'
+[   7]    010B: 59 00 47 00 42 00 47 00               FRONT DW 'Y','G','B','G'
+[   8]    0113: 4F 00 52 00 42 00 59 00               LEFT  DW 'O','R','B','Y'
+[   9]    011B: 42 00 57 00 52 00 4F 00               RIGHT DW 'B','W','R','O'
+[  10]    0123: 42 00 47 00 57 00 47 00               BACK  DW 'B','G','W','G'
+[  11]    012B: 52 00 59 00 57 00 4F 00               DOWN  DW 'R','Y','W','O'
+[  12]        :                                       
+[  13]    0133: 00 00                                 TEMP1  DW  0
+[  14]    0135: 00 00                                 TEMP2  DW  0
+[  15]    0137: 00 00                                 TEMP0  DW  0
+[  16]        :                                       
+[  17]    0139: 00 00                                 count52 DW 0
+[  18]    013B: 61 72 72 61 79 20 6F 75 74 20 6F 66   error1_52 db "array out of range! $"
+                20 72 61 6E 67 65 21 20 24          
+[  19]    0150: 00 00 00 00 00 00 00 00 00 00 00 00   moves dw 256 dup(0) ; accha , eta ki 256 er beshi ki rakha jabe? say 500 ?
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00             
+[  20]    0350: 00 00                                 index dw 0
+[  21]        :                                       
+[  22]    0352: 00 00                                 bool1 dw 0
+[  23]    0354: 00 00                                 bool2 dw 0
+[  24]        :                                       
+[  25]    0356:                                       .CODE
+[  26]        :                                       
+[  27]    0356:                                       MAIN PROC
+[  28]    0356: 8C C8                                 	MOV AX, @DATA
+[  29]    0358: 8E D8                                 	MOV DS, AX
+[  30]    035A: 8E C0                                 	MOV ES, AX
+[  31]        :                                       	;/*PORE EI KHANE CODE LEKHA HOBE*/
+[  32]    035C: E8 CC 0A                              	CALL PRINTER
+[  33]    035F: E8 E7 00                              	call PlaceCorner1
+[  34]    0362: E8 C6 0A                              	CALL PRINTER
+[  35]    0365: E8 CE 02                              	call PlaceAnotherCorner
+[  36]    0368: E8 C0 0A                              	CALL PRINTER
+[  37]    036B: E8 C8 02                              	call PlaceAnotherCorner
+[  38]    036E: E8 BA 0A                              	CALL PRINTER
+[  39]    0371: E8 C2 02                              	call PlaceAnotherCorner
+[  40]    0374: E8 B4 0A                              	CALL PRINTER
+[  41]        :                                       	
+[  42]    0377: E8 FF 03                              	call ShowMoves
+[  43]    037A: A1 50 03                              	mov Ax, index
+[  44]    037D: B1 01                                 	mov cl, 1
+[  45]    037F: D3 E8                                 	SHR ax, cl
+[  46]    0381: E8 C2 03                              	call OUTDEC
+[  47]        :                                       	
+[  48]        :                                       	
+[  49]        :                                       	;/*TO BE CONTINUED ...  ...  ...*/
+[  50]        :                                       MAIN ENDP
+[  51]    0384:                                       PlaceCorner1FromUpperSide proc
+[  52]        :                                       
+[  53]    0384: 50                                    push Ax
+[  54]    0385: 53                                    push Bx
+[  55]    0386: 51                                    Push cx
+[  56]    0387: 52                                    Push Dx
+[  57]    0388: 56                                    Push Si
+[  58]    0389: 57                                    Push Di
+[  59]        :                                       ;/***************/
+[  60]    038A: B9 00 00                              mov Cx, 0
+[  61]    038D:                                       _1stForLoopPC1FUS:
+[  62]        :                                       
+[  63]    038D: 83 F9 04                              cmp cx, 4
+[  64]    0390: 7D 36                                 JGE _1stForEndInPC1FUS
+[  65]        :                                       
+[  66]    0392: BB 00 00                              Mov bx, 0
+[  67]    0395: 8B 87 03 01                           mov Ax, up[bx]
+[  68]    0399: 3D 57 00                              cmp Ax, 'W'
+[  69]        :                                       
+[  70]    039C: 75 20                                 JNE _1stElseInPC1FUS
+[  71]        :                                       
+[  72]    039E: 8B 87 13 01                           mov Ax, left[bx]
+[  73]    03A2: 3D 47 00                              cmp Ax, 'G'
+[  74]    03A5: 75 12                                 JNE _2ndElseInPC1FUS
+[  75]        :                                       	
+[  76]    03A7: E8 03 0A                              	call U
+[  77]    03AA: E8 14 06                              	call B
+[  78]    03AD: E8 11 06                              	call B
+[  79]    03B0: B8 01 00                              	mov Ax, 1
+[  80]    03B3: A3 52 03                              	mov bool1, Ax
+[  81]    03B6: E9 83 00                              	jmp ExitPC1FUS
+[  82]    03B9:                                       _2ndElseInPC1FUS:
+[  83]    03B9: E8 F1 09                              	call U
+[  84]    03BC: EB 05                                 jmp End1stForPC1FUS 	
+[  85]    03BE:                                       _1stElseInPC1FUS:
+[  86]    03BE: E8 EC 09                              	call U
+[  87]    03C1: EB 00                                 	jmp End1stForPC1FUS
+[  88]    03C3:                                       End1stForPC1FUS:
+[  89]    03C3: 83 C1 01                              	add cx, 1
+[  90]    03C6: EB C5                                 	jmp _1stForLoopPC1FUS
+[  91]        :                                       	
+[  92]    03C8:                                       _1stForEndInPC1FUS:
+[  93]        :                                       ;/***************/
+[  94]    03C8: B9 00 00                              mov Cx, 0
+[  95]    03CB:                                       _2ndForLoopPC1FUS:
+[  96]        :                                       
+[  97]    03CB: 83 F9 04                              cmp cx, 4
+[  98]    03CE: 7D 32                                 JGE _2ndForEndInPC1FUS
+[  99]        :                                       
+[ 100]    03D0: BB 00 00                              Mov bx, 0
+[ 101]    03D3: 8B 87 13 01                           mov Ax, left[bx]
+[ 102]    03D7: 3D 57 00                              cmp Ax, 'W'
+[ 103]        :                                       
+[ 104]    03DA: 75 1C                                 JNE _3rdElseInPC1FUS
+[ 105]    03DC: BB 02 00                              mov bx, 2
+[ 106]    03DF: 8B 87 23 01                           mov Ax, back[bx]
+[ 107]    03E3: 3D 47 00                              cmp Ax, 'G'
+[ 108]    03E6: 75 0B                                 JNE _4thElseInPC1FUS
+[ 109]        :                                       	
+[ 110]    03E8: E8 D6 05                              	call B
+[ 111]    03EB: B8 01 00                              	mov Ax, 1
+[ 112]    03EE: A3 52 03                              	mov bool1, Ax
+[ 113]    03F1: EB 49                                 	jmp ExitPC1FUS
+[ 114]    03F3:                                       _4thElseInPC1FUS:
+[ 115]    03F3: E8 B7 09                              	call U
+[ 116]    03F6: EB CB                                 jmp End1stForPC1FUS 	
+[ 117]    03F8:                                       _3rdElseInPC1FUS:
+[ 118]    03F8: E8 B2 09                              	call U
+[ 119]    03FB: EB C6                                 	jmp End1stForPC1FUS
+[ 120]    03FD:                                       End2ndForPC1FUS:
+[ 121]    03FD: 83 C1 01                              	add cx, 1
+[ 122]    0400: EB C9                                 	jmp _2ndForLoopPC1FUS
+[ 123]        :                                       	
+[ 124]    0402:                                       _2ndForEndInPC1FUS:
+[ 125]        :                                       ;/*********************/
+[ 126]    0402: B9 00 00                              mov Cx, 0
+[ 127]    0405:                                       _3rdForLoopPC1FUS:
+[ 128]        :                                       
+[ 129]    0405: 83 F9 04                              cmp cx, 4
+[ 130]    0408: 7D 32                                 JGE _3rdForEndInPC1FUS
+[ 131]        :                                       
+[ 132]    040A: BB 02 00                              Mov bx, 2
+[ 133]    040D: 8B 87 23 01                           mov Ax, back[bx]
+[ 134]    0411: 3D 57 00                              cmp Ax, 'W'
+[ 135]        :                                       
+[ 136]    0414: 75 1C                                 JNE _5thElseInPC1FUS
+[ 137]    0416: BB 00 00                              mov bx, 0
+[ 138]    0419: 8B 87 03 01                           mov Ax, up[bx]
+[ 139]    041D: 3D 47 00                              cmp Ax, 'G'
+[ 140]    0420: 75 0B                                 JNE _6thElseInPC1FUS
+[ 141]        :                                       	
+[ 142]    0422: E8 13 08                              	call Li
+[ 143]    0425: B8 01 00                              	mov Ax, 1
+[ 144]    0428: A3 52 03                              	mov bool1, Ax
+[ 145]    042B: EB 0F                                 	jmp ExitPC1FUS
+[ 146]    042D:                                       _6thElseInPC1FUS:
+[ 147]    042D: E8 7D 09                              	call U
+[ 148]    0430: EB 91                                 jmp End1stForPC1FUS 	
+[ 149]    0432:                                       _5thElseInPC1FUS:
+[ 150]    0432: E8 78 09                              	call U
+[ 151]    0435: EB 8C                                 	jmp End1stForPC1FUS
+[ 152]    0437:                                       End3rdForPC1FUS:
+[ 153]    0437: 83 C1 01                              	add cx, 1
+[ 154]    043A: EB C9                                 	jmp _3rdForLoopPC1FUS
+[ 155]        :                                       	
+[ 156]    043C:                                       _3rdForEndInPC1FUS:
+[ 157]        :                                       
+[ 158]    043C:                                       ExitPC1FUS:
+[ 159]    043C: B8 00 00                              	mov Ax, 0
+[ 160]    043F: A3 52 03                              	mov bool1, Ax
+[ 161]        :                                       	
+[ 162]    0442: 5F                                    	pop Di
+[ 163]    0443: 5E                                    	pop Si
+[ 164]    0444: 5A                                    	pop Dx
+[ 165]    0445: 59                                    	pop Cx
+[ 166]    0446: 5B                                    	pop Bx
+[ 167]    0447: 58                                    	pop Ax
+[ 168]    0448: C3                                    	ret
+[ 169]        :                                       PlaceCorner1FromUpperSide Endp
+[ 170]        :                                       
+[ 171]    0449:                                       PlaceCorner1 proc
+[ 172]    0449: 50                                    push Ax
+[ 173]    044A: 53                                    push Bx
+[ 174]    044B: 51                                    Push cx
+[ 175]    044C: 52                                    Push Dx
+[ 176]    044D: 56                                    Push Si
+[ 177]    044E: 57                                    Push Di
+[ 178]        :                                       ;/***************/
+[ 179]    044F: A1 52 03                              mov Ax, bool1
+[ 180]    0452: 3D 01 00                              cmp Ax, 1
+[ 181]    0455: 74 2F                                 JE exitPlaceCorner1
+[ 182]        :                                       
+[ 183]    0457: BB 06 00                              	mov bx, 6
+[ 184]    045A: 8B 87 2B 01                           	mov ax, down[bx]
+[ 185]    045E: 3D 57 00                              	cmp Ax, 'W'
+[ 186]    0461: 75 14                                 	JNE ElsePlaceCorner1
+[ 187]    0463: BB 06 00                              	mov bx, 6
+[ 188]    0466: 8B 87 13 01                           	mov ax, left[bx]
+[ 189]    046A: 3D 4F 00                              	cmp Ax, 'O'
+[ 190]    046D: 75 08                                 	JNE ElsePlaceCorner1
+[ 191]    046F: B8 01 00                              	mov Ax, 1
+[ 192]    0472: A3 52 03                              	mov bool1, Ax 	
+[ 193]    0475: EB 0F                                 jmp exitPlaceCorner1
+[ 194]    0477:                                       ElsePlaceCorner1:
+[ 195]    0477: E8 C3 06                              call R
+[ 196]    047A: E8 C0 06                              call R
+[ 197]    047D: E8 3B 07                              call L
+[ 198]    0480: E8 38 07                              call L
+[ 199]    0483: E8 FE FE                              call PlaceCorner1FromUpperSide
+[ 200]        :                                       
+[ 201]    0486:                                       exitPlaceCorner1:
+[ 202]        :                                       ;/***************/
+[ 203]    0486: 5F                                    	pop Di
+[ 204]    0487: 5E                                    	pop Si
+[ 205]    0488: 5A                                    	pop Dx
+[ 206]    0489: 59                                    	pop Cx
+[ 207]    048A: 5B                                    	pop Bx
+[ 208]    048B: 58                                    	pop Ax
+[ 209]    048C: C3                                    	ret
+[ 210]        :                                       
+[ 211]        :                                       PlaceCorner1 Endp
+[ 212]        :                                       
+[ 213]    048D:                                       PlaceAnotherCornerFromUpperSide proc
+[ 214]    048D: 50                                    push Ax
+[ 215]    048E: 53                                    push Bx
+[ 216]    048F: 51                                    Push cx
+[ 217]    0490: 52                                    Push Dx
+[ 218]    0491: 56                                    Push Si
+[ 219]    0492: 57                                    Push Di
+[ 220]        :                                       ;/***************/
+[ 221]        :                                       
+[ 222]    0493: B9 00 00                              mov Cx, 0
+[ 223]    0496:                                       _1stForPACFUS:
+[ 224]    0496: 83 F9 04                              cmp cx, 4
+[ 225]    0499: 7D 6F                                 JGE End1stForPACFUS
+[ 226]        :                                       
+[ 227]    049B: BB 00 00                              	mov Bx, 0
+[ 228]    049E: 8B 87 1B 01                           	mov Ax, right[Bx]
+[ 229]    04A2: 3D 57 00                              	cmp Ax, 'W'
+[ 230]    04A5: 75 5E                                 	JNE Else1stForPACFUS
+[ 231]        :                                       	
+[ 232]    04A7: BB 04 00                              	mov Bx, 4
+[ 233]    04AA: 8B 87 03 01                           	mov Ax, up[bx]
+[ 234]    04AE: 3D 42 00                              	cmp Ax, 'B'
+[ 235]    04B1: 75 15                                 	JNE _1stElseIf1stForPACFUS
+[ 236]    04B3: E8 F7 08                              	call U
+[ 237]    04B6: E8 8C 04                              	call f
+[ 238]    04B9: E8 F1 08                              	call u
+[ 239]    04BC: E8 07 04                              	call fi
+[ 240]    04BF: B8 01 00                              	Mov Ax, 1
+[ 241]    04C2: A3 54 03                              	mov Bool2, Ax
+[ 242]    04C5: E9 61 01                              	Jmp ExitPACFUS
+[ 243]        :                                       	
+[ 244]    04C8:                                       _1stElseIf1stForPACFUS:
+[ 245]    04C8: BB 04 00                              mov Bx, 4
+[ 246]    04CB: 8B 87 03 01                           	mov Ax, up[Bx]
+[ 247]    04CF: 3D 47 00                              	cmp Ax,'G'
+[ 248]    04D2: 75 15                                 	JNE _2ndElseIf1stForPACFUS
+[ 249]    04D4: E8 5E 08                              	call Ui
+[ 250]    04D7: E8 E7 04                              	call B
+[ 251]    04DA: E8 D0 08                              	call U
+[ 252]    04DD: E8 60 05                              	call Bi
+[ 253]    04E0: B8 01 00                              	Mov Ax, 1
+[ 254]    04E3: A3 54 03                              	mov Bool2, Ax
+[ 255]    04E6: E9 40 01                              	Jmp ExitPACFUS
+[ 256]        :                                       	
+[ 257]    04E9:                                       _2ndElseIf1stForPACFUS:
+[ 258]    04E9: BB 04 00                              	mov Bx, 4
+[ 259]    04EC: 8B 87 03 01                           	mov Ax, up[Bx]
+[ 260]    04F0: 3D 52 00                              	cmp Ax,'R'
+[ 261]    04F3: E8 47 06                              	call R
+[ 262]    04F6: E8 B4 08                              	call U
+[ 263]    04F9: E8 C0 05                              	call Ri
+[ 264]    04FC: B8 01 00                              	Mov Ax, 1
+[ 265]    04FF: A3 54 03                              	mov Bool2, Ax
+[ 266]    0502: E9 24 01                              	Jmp ExitPACFUS
+[ 267]        :                                       	
+[ 268]        :                                       	
+[ 269]        :                                       	
+[ 270]    0505:                                       Else1stForPACFUS:
+[ 271]    0505: E8 A5 08                              	call U
+[ 272]    0508: EB 8C                                 	jmp _1stForPACFUS
+[ 273]        :                                       
+[ 274]    050A:                                       End1stForPACFUS:
+[ 275]        :                                       ;/****************/
+[ 276]        :                                       ;/**2nd loop **/
+[ 277]        :                                       ;/***************/
+[ 278]        :                                       
+[ 279]    050A: B9 00 00                              mov Cx, 0
+[ 280]    050D:                                       _2ndForPACFUS:
+[ 281]    050D: 83 F9 04                              cmp cx, 4
+[ 282]    0510: 7D 6F                                 JGE End2ndForPACFUS
+[ 283]        :                                       
+[ 284]    0512: BB 02 00                              	mov Bx, 2
+[ 285]    0515: 8B 87 0B 01                           	mov Ax, front[Bx]
+[ 286]    0519: 3D 57 00                              	cmp Ax, 'W'
+[ 287]    051C: 75 5E                                 	JNE Else2ndForPACFUS
+[ 288]        :                                       	
+[ 289]    051E: BB 04 00                              	mov Bx, 4
+[ 290]    0521: 8B 87 03 01                           	mov Ax, up[bx]
+[ 291]    0525: 3D 4F 00                              	cmp Ax, 'O'
+[ 292]    0528: 75 15                                 	JNE _1stElseIf2ndForPACFUS
+[ 293]    052A: E8 80 08                              	call U
+[ 294]    052D: E8 08 07                              	call Li
+[ 295]    0530: E8 02 08                              	call ui
+[ 296]    0533: E8 85 06                              	call L
+[ 297]    0536: B8 01 00                              	Mov Ax, 1
+[ 298]    0539: A3 54 03                              	mov Bool2, Ax
+[ 299]    053C: E9 EA 00                              	Jmp ExitPACFUS
+[ 300]        :                                       	
+[ 301]    053F:                                       _1stElseIf2ndForPACFUS:
+[ 302]    053F: BB 04 00                              mov Bx, 4
+[ 303]    0542: 8B 87 03 01                           	mov Ax, up[Bx]
+[ 304]    0546: 3D 52 00                              	cmp Ax,'R'
+[ 305]    0549: 75 15                                 	JNE _2ndElseIf2ndForPACFUS
+[ 306]    054B: E8 E7 07                              	call Ui
+[ 307]    054E: E8 6B 05                              	call Ri
+[ 308]    0551: E8 E1 07                              	call Ui
+[ 309]    0554: E8 E6 05                              	call R
+[ 310]    0557: B8 01 00                              	Mov Ax, 1
+[ 311]    055A: A3 54 03                              	mov Bool2, Ax
+[ 312]    055D: E9 C9 00                              	Jmp ExitPACFUS
+[ 313]        :                                       	
+[ 314]    0560:                                       _2ndElseIf2ndForPACFUS:
+[ 315]    0560: BB 04 00                              	mov Bx, 4
+[ 316]    0563: 8B 87 03 01                           	mov Ax, up[Bx]
+[ 317]    0567: 3D 42 00                              	cmp Ax,'B'
+[ 318]    056A: E8 59 03                              	call Fi
+[ 319]    056D: E8 C5 07                              	call Ui
+[ 320]    0570: E8 D2 03                              	call F
+[ 321]    0573: B8 01 00                              	Mov Ax, 1
+[ 322]    0576: A3 54 03                              	mov Bool2, Ax
+[ 323]    0579: E9 AD 00                              	Jmp ExitPACFUS
+[ 324]        :                                       	
+[ 325]        :                                       	
+[ 326]        :                                       	
+[ 327]    057C:                                       Else2ndForPACFUS:
+[ 328]    057C: E8 2E 08                              	call U
+[ 329]    057F: EB 8C                                 	jmp _2ndForPACFUS
+[ 330]        :                                       
+[ 331]    0581:                                       End2ndForPACFUS:
+[ 332]        :                                       ;/**3rd for loop**/
+[ 333]        :                                       
+[ 334]    0581: B9 00 00                              mov Cx, 0
+[ 335]    0584:                                       _3rdForPACFUS:
+[ 336]    0584: 83 F9 04                              cmp cx, 4
+[ 337]    0587: 7C 03 E9 9D 00                        JGE End3rdForPACFUS
+[ 338]        :                                       
+[ 339]    058C: BB 04 00                              	mov Bx, 4
+[ 340]    058F: 8B 87 03 01                           	mov Ax, up[Bx]
+[ 341]    0593: 3D 57 00                              	cmp Ax, 'W'
+[ 342]    0596: 74 03 E9 88 00                        	JNE Else3rdForPACFUS
+[ 343]        :                                       	
+[ 344]    059B: BB 02 00                              	mov Bx, 2
+[ 345]    059E: 8B 87 0B 01                           	mov Ax, front[bx]
+[ 346]    05A2: 3D 42 00                              	cmp Ax, 'B'
+[ 347]    05A5: 75 23                                 	JNE _1stElseIf3rdForPACFUS
+[ 348]    05A7: E8 03 08                              	call U
+[ 349]    05AA: E8 8B 06                              	call Li
+[ 350]    05AD: E8 FD 07                              	call u
+[ 351]    05B0: E8 08 06                              	call L
+[ 352]    05B3: E8 F7 07                              	call u
+[ 353]    05B6: E8 F4 07                              	call u
+[ 354]    05B9: E8 7C 06                              	call li
+[ 355]    05BC: E8 76 07                              	call ui
+[ 356]    05BF: E8 F9 05                              	call L
+[ 357]    05C2: B8 01 00                              	Mov Ax, 1
+[ 358]    05C5: A3 54 03                              	mov Bool2, Ax
+[ 359]    05C8: EB 5F                                 	Jmp ExitPACFUS
+[ 360]        :                                       	
+[ 361]    05CA:                                       _1stElseIf3rdForPACFUS:
+[ 362]    05CA: BB 02 00                              mov Bx, 2
+[ 363]    05CD: 8B 87 0B 01                           	mov Ax, front[Bx]
+[ 364]    05D1: 3D 52 00                              	cmp Ax,'R'
+[ 365]    05D4: 75 20                                 	JNE _2ndElseIf3rdForPACFUS
+[ 366]    05D6: E8 64 05                              	call R
+[ 367]    05D9: E8 59 07                              	call ui
+[ 368]    05DC: E8 DD 04                              	call ri
+[ 369]    05DF: E8 CB 07                              	call u
+[ 370]    05E2: E8 C8 07                              call u
+[ 371]    05E5: E8 55 05                              call r
+[ 372]    05E8: E8 C2 07                              call u
+[ 373]    05EB: E8 CE 04                              call ri
+[ 374]        :                                       	
+[ 375]    05EE: B8 01 00                              	Mov Ax, 1
+[ 376]    05F1: A3 54 03                              	mov Bool2, Ax
+[ 377]    05F4: EB 33                                 	Jmp ExitPACFUS
+[ 378]        :                                       	
+[ 379]    05F6:                                       _2ndElseIf3rdForPACFUS:
+[ 380]    05F6: BB 02 00                              	mov Bx, 2
+[ 381]    05F9: 8B 87 0B 01                           	mov Ax, front[Bx]
+[ 382]    05FD: 3D 47 00                              	cmp Ax,'G'
+[ 383]    0600: E8 32 07                              	call ui
+[ 384]    0603: E8 B6 04                              	call ri
+[ 385]    0606: E8 A4 07                              	call u
+[ 386]    0609: E8 31 05                              call r
+[ 387]    060C: E8 9E 07                              call u
+[ 388]    060F: E8 9B 07                              call u
+[ 389]    0612: E8 A7 04                              call ri
+[ 390]    0615: E8 1D 07                              call ui
+[ 391]    0618: E8 22 05                              call r
+[ 392]        :                                       	
+[ 393]    061B: B8 01 00                              	Mov Ax, 1
+[ 394]    061E: A3 54 03                              	mov Bool2, Ax
+[ 395]    0621: EB 06                                 	Jmp ExitPACFUS
+[ 396]        :                                       	
+[ 397]        :                                       	
+[ 398]        :                                       	
+[ 399]    0623:                                       Else3rdForPACFUS:
+[ 400]    0623: E8 87 07                              	call U
+[ 401]    0626: E9 5B FF                              	jmp _3rdForPACFUS
+[ 402]        :                                       
+[ 403]    0629:                                       End3rdForPACFUS:
+[ 404]        :                                       
+[ 405]    0629:                                       ExitPACFUS:
+[ 406]    0629: B8 00 00                              Mov Ax, 0
+[ 407]    062C: A3 54 03                              	mov Bool2, Ax
+[ 408]        :                                       ;/***************/
+[ 409]    062F: 5F                                    	pop Di
+[ 410]    0630: 5E                                    	pop Si
+[ 411]    0631: 5A                                    	pop Dx
+[ 412]    0632: 59                                    	pop Cx
+[ 413]    0633: 5B                                    	pop Bx
+[ 414]    0634: 58                                    	pop Ax
+[ 415]    0635: C3                                    	ret
+[ 416]        :                                       PlaceAnotherCornerFromUpperSide Endp
+[ 417]        :                                       
+[ 418]    0636:                                       PlaceAnotherCorner proc
+[ 419]        :                                       
+[ 420]    0636: 50                                    push Ax
+[ 421]    0637: 53                                    push Bx
+[ 422]    0638: 51                                    Push cx
+[ 423]    0639: 52                                    Push Dx
+[ 424]    063A: 56                                    Push Si
+[ 425]    063B: 57                                    Push Di
+[ 426]        :                                       ;/***************/
+[ 427]    063C: E8 4E FE                              call PlaceAnotherCornerFromUpperSide
+[ 428]    063F: A1 54 03                              mov Ax, bool2
+[ 429]    0642: 3D 01 00                              cmp Ax, 1
+[ 430]    0645: 90 90                                 JE ExitPAC
+[ 431]        :                                       ; 1st if
+[ 432]    0647: BB 06 00                              	mov bx, 6
+[ 433]    064A: 8B 87 0B 01                           	mov Ax, front[bx]
+[ 434]    064E: 3D 57 00                              	cmp Ax, 'W'
+[ 435]    0651: 74 0C                                 	JE Do1stIfPAC
+[ 436]    0653: BB 04 00                              	mov bx, 4
+[ 437]    0656: 8B 87 13 01                           	mov Ax, left[bx]
+[ 438]    065A: 3D 57 00                              	cmp Ax, 'W'
+[ 439]    065D: 75 0F                                 	JNE _1stElseIfPac
+[ 440]    065F:                                       Do1stIfPAC:
+[ 441]    065F: E8 D6 05                              		call Li
+[ 442]    0662: E8 D0 06                              		call Ui
+[ 443]    0665: E8 53 05                              		call L
+[ 444]    0668: E8 22 FE                              		call PlaceAnotherCornerFromUpperSide
+[ 445]    066B: E9 92 F9                              		jmp ExitPac
+[ 446]        :                                       		;1st else if
+[ 447]    066E:                                       _1stElseIfPac:
+[ 448]        :                                       
+[ 449]    066E: BB 00 00                              mov bx, 0
+[ 450]    0671: 8B 87 2B 01                           	mov Ax, down[bx]
+[ 451]    0675: 3D 57 00                              	cmp Ax, 'W'
+[ 452]    0678: 75 1B                                 	JNE _2ndElseIfPac
+[ 453]    067A: BB 06 00                              	mov bx, 6
+[ 454]    067D: 8B 87 0B 01                           	mov Ax, front[bx]
+[ 455]    0681: 3D 42 00                              	cmp Ax, 'B'
+[ 456]    0684: 75 0F                                 	JNE _2ndElseIfPac
+[ 457]    0686:                                       Do1stElseIfPAC:
+[ 458]    0686: E8 AF 05                              		call Li
+[ 459]    0689: E8 A9 06                              		call Ui
+[ 460]    068C: E8 2C 05                              		call L
+[ 461]    068F: E8 FB FD                              		call PlaceAnotherCornerFromUpperSide
+[ 462]    0692: E9 6B F9                              		jmp ExitPac
+[ 463]        :                                       
+[ 464]    0695:                                       _2ndElseIfPac:
+[ 465]        :                                       ;2nd else if
+[ 466]        :                                       
+[ 467]    0695: BB 04 00                              	mov bx, 4
+[ 468]    0698: 8B 87 0B 01                           	mov Ax, front[bx]
+[ 469]    069C: 3D 57 00                              	cmp Ax, 'W'
+[ 470]    069F: 74 0C                                 	JE Do2ndElseIfPAC
+[ 471]    06A1: BB 06 00                              	mov bx, 6
+[ 472]    06A4: 8B 87 1B 01                           	mov Ax, right[bx]
+[ 473]    06A8: 3D 57 00                              	cmp Ax, 'W'
+[ 474]    06AB: 75 0F                                 	JNE _3rdElseIfPac
+[ 475]    06AD:                                       Do2ndElseIfPAC:
+[ 476]    06AD: E8 8D 04                              		call r
+[ 477]    06B0: E8 FA 06                              		call U
+[ 478]    06B3: E8 06 04                              		call ri
+[ 479]    06B6: E8 D4 FD                              		call PlaceAnotherCornerFromUpperSide
+[ 480]    06B9: E9 44 F9                              		jmp ExitPac
+[ 481]        :                                       		
+[ 482]    06BC:                                       _3rdElseIfPac:
+[ 483]    06BC: BB 02 00                              mov bx, 02
+[ 484]    06BF: 8B 87 2B 01                           	mov Ax, down[bx]
+[ 485]    06C3: 3D 57 00                              	cmp Ax, 'W'
+[ 486]    06C6: 75 1E                                 	JNE _4thElseIfPac
+[ 487]    06C8: BB 06 00                              	mov bx, 6
+[ 488]    06CB: 8B 87 1B 01                           	mov Ax, right[bx]
+[ 489]    06CF: 3D 52 00                              	cmp Ax, 'R'
+[ 490]    06D2: 74 12                                 	JE _4thElseIfPac
+[ 491]    06D4:                                       Do3rdtElseIfPAC:
+[ 492]    06D4: E8 EF 01                              		call Fi
+[ 493]    06D7: E8 5B 06                              		call Ui
+[ 494]    06DA: E8 68 02                              		call F
+[ 495]    06DD: E8 CD 06                              		call U
+[ 496]    06E0: E8 AA FD                              		call PlaceAnotherCornerFromUpperSide
+[ 497]    06E3: E9 1A F9                              		jmp ExitPac
+[ 498]    06E6:                                       	_4thElseIfPac:
+[ 499]        :                                       	;4nd else if
+[ 500]        :                                       
+[ 501]    06E6: BB 04 00                              	mov bx, 4
+[ 502]    06E9: 8B 87 1B 01                           	mov Ax, right[bx]
+[ 503]    06ED: 3D 57 00                              	cmp Ax, 'W'
+[ 504]    06F0: 74 0C                                 	JE Do4thElseIfPAC
+[ 505]    06F2: BB 06 00                              	mov bx, 6
+[ 506]    06F5: 8B 87 23 01                           	mov Ax, back[bx]
+[ 507]    06F9: 3D 57 00                              	cmp Ax, 'W'
+[ 508]    06FC: 75 12                                 	JNE _5thElseIfPac
+[ 509]    06FE:                                       Do4thElseIfPAC:
+[ 510]    06FE: E8 BB 03                              		call ri
+[ 511]    0701: E8 A9 06                              		call U
+[ 512]    0704: E8 36 04                              		call r
+[ 513]    0707: E8 A3 06                              call U 		
+[ 514]    070A: E8 80 FD                              		call PlaceAnotherCornerFromUpperSide
+[ 515]    070D: E9 F0 F8                              		jmp ExitPac
+[ 516]    0710:                                       	_5thElseIfPac:
+[ 517]    0710: BB 04 00                              	mov bx, 4
+[ 518]    0713: 8B 87 2B 01                           	mov Ax, down[bx]
+[ 519]    0717: 3D 57 00                              	cmp Ax, 'W'
+[ 520]    071A: 90 90                                 	JNE ExitPac
+[ 521]    071C: BB 06 00                              	mov bx, 6
+[ 522]    071F: 8B 87 23 01                           	mov Ax, back[bx]
+[ 523]    0723: 3D 47 00                              	cmp Ax, 'G'
+[ 524]    0726: 90 90                                 	JE exitPac
+[ 525]    0728:                                       Do5thtElseIfPAC:
+[ 526]    0728: E8 91 03                              		call ri
+[ 527]    072B: E8 07 06                              		call Ui
+[ 528]    072E: E8 04 06                              		call ui
+[ 529]    0731: E8 09 04                              		call r
+[ 530]    0734: E8 76 06                              call u 		
+[ 531]    0737: E8 53 FD                              		call PlaceAnotherCornerFromUpperSide
+[ 532]    073A: E9 C3 F8                              		jmp ExitPac
+[ 533]        :                                       ;/***************/
+[ 534]    073D:                                       ExitPAC :
+[ 535]        :                                       
+[ 536]    073D: 5F                                    	pop Di
+[ 537]    073E: 5E                                    	pop Si
+[ 538]    073F: 5A                                    	pop Dx
+[ 539]    0740: 59                                    	pop Cx
+[ 540]    0741: 5B                                    	pop Bx
+[ 541]    0742: 58                                    	pop Ax
+[ 542]    0743: C3                                    	ret
+[ 543]        :                                       PlaceAnotherCorner Endp
+[ 544]        :                                       
+[ 545]    0744: EB 30                                 jmp MAINEXIT9
+[ 546]        :                                       
+[ 547]    0746:                                       OUTDEC PROC
+[ 548]        :                                       ;INPUT AX
+[ 549]    0746: 50                                    PUSH AX
+[ 550]    0747: 53                                    PUSH BX
+[ 551]    0748: 51                                    PUSH CX
+[ 552]    0749: 52                                    PUSH DX
+[ 553]    074A: 0B C0                                 OR AX,AX
+[ 554]    074C: 7D 0A                                 JGE @END_IF1
+[ 555]    074E: 50                                    PUSH AX
+[ 556]    074F: B2 2D                                 MOV DL,'-'
+[ 557]    0751: B4 02                                 MOV AH,2
+[ 558]    0753: CD 21                                 INT 21H
+[ 559]    0755: 58                                    POP AX
+[ 560]    0756: F7 D8                                 NEG AX
+[ 561]        :                                       
+[ 562]    0758:                                       @END_IF1:
+[ 563]    0758: 33 C9                                 XOR CX,CX
+[ 564]    075A: BB 0A 00                              MOV BX,10D
+[ 565]        :                                       
+[ 566]    075D:                                       @REPEAT1:
+[ 567]    075D: 33 D2                                 XOR DX,DX
+[ 568]    075F: F7 F3                                 DIV BX
+[ 569]    0761: 52                                    PUSH DX
+[ 570]    0762: 41                                    INC CX
+[ 571]    0763: 0B C0                                 OR AX,AX
+[ 572]    0765: 75 F6                                 JNE @REPEAT1
+[ 573]        :                                       
+[ 574]    0767: B4 02                                 MOV AH,2
+[ 575]        :                                       
+[ 576]    0769:                                       @PRINT_LOOP:
+[ 577]        :                                       
+[ 578]    0769: 5A                                    POP DX
+[ 579]    076A: 80 CA 30                              OR DL,30H
+[ 580]    076D: CD 21                                 INT 21H
+[ 581]    076F: E2 F8                                 LOOP @PRINT_LOOP
+[ 582]        :                                       
+[ 583]    0771: 5A                                    POP DX
+[ 584]    0772: 59                                    POP CX
+[ 585]    0773: 5B                                    POP BX
+[ 586]    0774: 58                                    POP AX
+[ 587]    0775: C3                                    RET
+[ 588]        :                                       OUTDEC ENDP
+[ 589]        :                                       
+[ 590]    0776:                                       MAINEXIT9:
+[ 591]    0776: E9 DE 00                              JMP MAINEXIT1
+[ 592]        :                                       
+[ 593]    0779:                                       ShowMoves proc
+[ 594]    0779: 50                                    push ax
+[ 595]    077A: 53                                    push bx
+[ 596]    077B: 51                                    push cx
+[ 597]    077C: 52                                    push dx
+[ 598]    077D: 56                                    push si
+[ 599]    077E: 57                                    push di
+[ 600]        :                                       ;PRINT NEW LINE
+[ 601]    077F: B4 02                                 MOV AH,2
+[ 602]    0781: B2 0D                                 MOV DL, 0DH; CARRIAGE RETURN
+[ 603]    0783: CD 21                                 INT 21H
+[ 604]        :                                       
+[ 605]    0785: B2 0A                                 MOV DL, 0AH; lINE FEED
+[ 606]    0787: CD 21                                 INT 21H
+[ 607]        :                                       ;NEWLINE CLOSED
+[ 608]        :                                       
+[ 609]    0789: BE 50 01                              lea Si, moves
+[ 610]    078C: B9 00 00                              mov cx, 0
+[ 611]    078F:                                       Loop_PrinterShowMoves:
+[ 612]    078F: 3B 0E 50 03                           cmp cx, index
+[ 613]    0793: 7D 2E                                 JGE ExitShowMoves
+[ 614]    0795: BB 00 00                              mov bx, 0
+[ 615]    0798: 8B 1C                                 mov bx, [si]
+[ 616]    079A: 8A D3                                 MOV DL, BL
+[ 617]    079C: B4 02                                 MOV AH,2
+[ 618]    079E: CD 21                                 INT 21H
+[ 619]    07A0: 83 C6 02                              add si, 2
+[ 620]    07A3: 83 C1 02                              add cx, 2
+[ 621]    07A6: EB E7                                 jmp Loop_PrinterShowMoves
+[ 622]        :                                       
+[ 623]        :                                       
+[ 624]        :                                       ;PRINT NEW LINE
+[ 625]    07A8: B4 02                                 MOV AH,2
+[ 626]    07AA: B2 0D                                 MOV DL, 0DH; CARRIAGE RETURN
+[ 627]    07AC: CD 21                                 INT 21H
+[ 628]        :                                       
+[ 629]    07AE: B2 0A                                 MOV DL, 0AH; lINE FEED
+[ 630]    07B0: CD 21                                 INT 21H
+[ 631]        :                                       ;NEWLINE CLOSED
+[ 632]        :                                       ;PRINT S
+[ 633]    07B2: B4 09                                 MOV AH,9
+[ 634]    07B4: BA 3B 01                              LEA DX, error1_52
+[ 635]    07B7: CD 21                                 INT 21H
+[ 636]        :                                       ;PRINT NEW LINE
+[ 637]    07B9: B4 02                                 MOV AH,2
+[ 638]    07BB: B2 0D                                 MOV DL, 0DH; CARRIAGE RETURN
+[ 639]    07BD: CD 21                                 INT 21H
+[ 640]        :                                       
+[ 641]    07BF: B2 0A                                 MOV DL, 0AH; lINE FEED
+[ 642]    07C1: CD 21                                 INT 21H
+[ 643]        :                                       ;NEWLINE CLOSED
+[ 644]    07C3:                                       ExitShowMoves:	
+[ 645]    07C3: 5F                                    pop di
+[ 646]    07C4: 5E                                    pop si
+[ 647]    07C5: 5A                                    pop dx
+[ 648]    07C6: 59                                    pop cx
+[ 649]    07C7: 5B                                    pop bx
+[ 650]    07C8: 58                                    pop ax
+[ 651]    07C9: C3                                    ret
+[ 652]        :                                       
+[ 653]        :                                       ShowMoves Endp
+[ 654]        :                                       
+[ 655]        :                                       ;arrray moves has the F, u, ... and index points to the last pos
+[ 656]        :                                       ; count52 has the count
+[ 657]    07CA:                                       Backchecker proc
+[ 658]    07CA: 50                                    push ax
+[ 659]    07CB: 53                                    push bx
+[ 660]    07CC: 51                                    push cx
+[ 661]    07CD: 52                                    push dx
+[ 662]    07CE: 56                                    push si
+[ 663]    07CF: 57                                    push di
+[ 664]        :                                       
+[ 665]    07D0: A1 50 03                              mov ax, index
+[ 666]    07D3: 3D 04 00                              cmp ax, 4
+[ 667]    07D6: 7E 40                                 JLE Exit_BackChecker1
+[ 668]    07D8: E8 B4 00                              call counter1
+[ 669]    07DB: A1 39 01                              mov Ax, count52
+[ 670]    07DE: 3D 03 00                              cmp Ax, 3
+[ 671]    07E1: 75 35                                 JNE Exit_BackChecker1
+[ 672]    07E3: 8B 1E 50 03                           mov Bx, index
+[ 673]    07E7: 83 EB 02                              sub Bx, 2
+[ 674]    07EA: B8 00 00                              mov Ax, 0
+[ 675]    07ED: 89 87 50 01                           mov moves[bx], Ax
+[ 676]    07F1: 83 EB 02                              sub bx, 2
+[ 677]    07F4: 89 87 50 01                           mov moves[bx], Ax
+[ 678]    07F8: 89 1E 50 03                           mov index, bx
+[ 679]    07FC: 83 EB 02                              sub bx, 2
+[ 680]    07FF: 8B 87 50 01                           mov Ax, moves[Bx]
+[ 681]    0803: 3D 60 00                              cmp Ax, 96
+[ 682]    0806: 7F 09                                 JG u_to_U
+[ 683]    0808: 05 20 00                              Add Ax, 32
+[ 684]    080B: 89 87 50 01                           mov moves[bx], ax
+[ 685]    080F: EB 07                                 jmp Exit_BackChecker1
+[ 686]        :                                       
+[ 687]    0811:                                       u_to_U:
+[ 688]    0811: 2D 20 00                              sub Ax, 32
+[ 689]    0814: 89 87 50 01                           mov moves[bx], Ax
+[ 690]    0818:                                       Exit_BackChecker1:
+[ 691]        :                                       
+[ 692]    0818: A1 50 03                              mov ax, index
+[ 693]    081B: 3D 04 00                              cmp Ax, 4
+[ 694]    081E: 7C 30                                 JL Exit_BackCheccker2
+[ 695]        :                                       ; else
+[ 696]    0820: 8B 1E 50 03                           	mov bx, index
+[ 697]    0824: 83 EB 02                              	sub bx, 2
+[ 698]    0827: 8B 87 50 01                           	mov Ax, moves[bx]
+[ 699]    082B: 83 EB 02                              	sub Bx, 2
+[ 700]    082E: 2B 87 50 01                           	sub Ax, moves[bx]
+[ 701]    0832: 3D 20 00                              	cmp Ax, 32
+[ 702]    0835: 74 05                                 	JE BackCheckerCaseUUi
+[ 703]        :                                       	
+[ 704]    0837: 3D E0 FF                              	cmp Ax,  0FFE0h;-32
+[ 705]    083A: 75 14                                 	Jne Exit_BackCheccker2
+[ 706]    083C:                                       	BackCheckerCaseUUi:
+[ 707]    083C: B8 00 00                              		mov ax, 0
+[ 708]    083F: 89 87 50 01                           		mov moves[bx], ax
+[ 709]    0843: 89 1E 50 03                           		mov index, bx
+[ 710]    0847: 83 C3 02                              		add bx, 2
+[ 711]    084A: C7 87 50 01 00 00                     		mov moves[bx], 0
+[ 712]    0850:                                       Exit_BackCheccker2:
+[ 713]        :                                       
+[ 714]    0850: 5F                                    pop di
+[ 715]    0851: 5E                                    pop si
+[ 716]    0852: 5A                                    pop dx
+[ 717]    0853: 59                                    pop cx
+[ 718]    0854: 5B                                    pop bx
+[ 719]    0855: 58                                    pop ax
+[ 720]    0856: C3                                    RET
+[ 721]        :                                       Backchecker endp
+[ 722]    0857:                                       MAINEXIT1:
+[ 723]    0857: E9 E8 00                              JMP MAINEXIT2
+[ 724]        :                                       
+[ 725]    085A:                                       Checker proc
+[ 726]    085A: 50                                    push ax
+[ 727]    085B: 53                                    push bx
+[ 728]    085C: 51                                    push cx
+[ 729]    085D: 52                                    push dx
+[ 730]    085E: 56                                    push si
+[ 731]    085F: 57                                    push di
+[ 732]    0860: E8 67 FF                              call BackChecker
+[ 733]    0863: E8 64 FF                              call BackChecker
+[ 734]    0866: 5F                                    pop di
+[ 735]    0867: 5E                                    pop si
+[ 736]    0868: 5A                                    pop dx
+[ 737]    0869: 59                                    pop cx
+[ 738]    086A: 5B                                    pop bx
+[ 739]    086B: 58                                    pop ax
+[ 740]    086C: C3                                    ret
+[ 741]        :                                       Checker endp
+[ 742]        :                                       
+[ 743]        :                                       
+[ 744]        :                                       
+[ 745]        :                                       
+[ 746]        :                                       ;/************/
+[ 747]        :                                       ;user manual
+[ 748]        :                                       ; mov ax, 'F'
+[ 749]        :                                       ;call savemoves
+[ 750]    086D:                                       SaveMoves proc
+[ 751]    086D: 50                                    push ax
+[ 752]    086E: 53                                    push bx
+[ 753]    086F: 51                                    push cx
+[ 754]    0870: 52                                    push dx
+[ 755]    0871: 56                                    push si
+[ 756]    0872: 57                                    push di
+[ 757]        :                                       
+[ 758]    0873: 8B 1E 50 03                           mov Bx, index
+[ 759]    0877: 81 FB F4 01                           cmp bx, 500
+[ 760]    087B: 7D 0B                                 JGE ArrayOutOfBondExceptionInShowMoves
+[ 761]        :                                       ;let Ax has the name( F, f, U, D, d ... ...)
+[ 762]    087D: 89 87 50 01                           mov moves[Bx], Ax
+[ 763]    0881: 83 C3 02                              Add Bx, 2
+[ 764]    0884: 89 1E 50 03                           mov index, Bx
+[ 765]    0888:                                       ArrayOutOfBondExceptionInShowMoves:
+[ 766]    0888: 5F                                    pop di
+[ 767]    0889: 5E                                    pop si
+[ 768]    088A: 5A                                    pop dx
+[ 769]    088B: 59                                    pop cx
+[ 770]    088C: 5B                                    pop bx
+[ 771]    088D: 58                                    pop ax
+[ 772]    088E: C3                                    ret
+[ 773]        :                                       SaveMoves endp
+[ 774]        :                                       
+[ 775]        :                                       
+[ 776]    088F:                                       Counter1 proc
+[ 777]    088F: 50                                    push ax
+[ 778]    0890: 53                                    push bx
+[ 779]    0891: 51                                    push cx
+[ 780]    0892: 52                                    push dx
+[ 781]    0893: 56                                    push si
+[ 782]    0894: 57                                    push di
+[ 783]        :                                       ; assuming index variable has the index pos; save output in the count52 var
+[ 784]    0895: 8B 1E 50 03                           mov bx, index
+[ 785]    0899: B9 01 00                              mov cx , 1
+[ 786]    089C: 83 EB 02                              sub bx, 2
+[ 787]    089F:                                       Counter_for_loop:
+[ 788]        :                                       	
+[ 789]    089F: 8B 87 50 01                           mov Ax, moves[bx]
+[ 790]    08A3: 83 FB 02                              cmp bx, 2
+[ 791]    08A6: 7C 13                                 JL counter_for_loop_break	
+[ 792]    08A8: 83 EB 02                              sub bx, 2
+[ 793]    08AB: 3B 87 50 01                           cmp Ax, moves[bx]
+[ 794]    08AF: 75 0A                                 JNE counter_for_loop_break
+[ 795]    08B1: 83 C1 01                              Add Cx, 1
+[ 796]    08B4: 83 F9 04                              cmp cx, 4
+[ 797]    08B7: 7D 02                                 JGE counter_for_loop_break
+[ 798]    08B9: EB E4                                 jmp  Counter_for_loop
+[ 799]        :                                       
+[ 800]    08BB:                                       counter_for_loop_break:
+[ 801]        :                                       
+[ 802]    08BB: 89 0E 39 01                           mov count52 , Cx
+[ 803]    08BF: 5F                                    pop di
+[ 804]    08C0: 5E                                    pop si
+[ 805]    08C1: 5A                                    pop dx
+[ 806]    08C2: 59                                    pop cx
+[ 807]    08C3: 5B                                    pop bx
+[ 808]    08C4: 58                                    pop ax
+[ 809]    08C5: C3                                    RET
+[ 810]        :                                       Counter1 endp
+[ 811]        :                                       ;BASIC MOVE FUNCTIONS
+[ 812]    08C6:                                       FI PROC
+[ 813]    08C6: 50                                    	PUSH AX
+[ 814]    08C7: 53                                    	PUSH BX
+[ 815]    08C8: 51                                    	PUSH CX
+[ 816]    08C9: 52                                    	PUSH DX
+[ 817]    08CA: 56                                    	PUSH SI
+[ 818]    08CB: 57                                    	PUSH DI
+[ 819]        :                                       	;/********/
+[ 820]        :                                       	;/********/
+[ 821]    08CC: B8 00 00                              	MOV AX, 0
+[ 822]    08CF: BE 03 01                              	LEA SI, UP
+[ 823]    08D2: 8B 44 06                              	MOV AX, [SI+6]
+[ 824]    08D5: A3 37 01                              	MOV TEMP0 , AX
+[ 825]    08D8: 8B 44 04                              	MOV AX, [SI+4]
+[ 826]    08DB: A3 33 01                              	MOV TEMP1 , AX
+[ 827]        :                                       	;/**********/
+[ 828]        :                                       	;/**********/
+[ 829]    08DE: BF 1B 01                              	LEA DI, RIGHT
+[ 830]    08E1: 8B 05                                 	MOV AX, [DI]
+[ 831]    08E3: 89 44 06                              	MOV [SI+6], AX
+[ 832]    08E6: 8B 45 06                              	MOV AX, [DI+6]
+[ 833]    08E9: 89 44 04                              	MOV [SI+4], AX
+[ 834]        :                                       	;/*****************/
+[ 835]        :                                       	;/*****************/
+[ 836]        :                                       		
+[ 837]    08EC: BE 2B 01                              	LEA SI, DOWN
+[ 838]    08EF: 8B 44 02                              	MOV AX, [SI+2]
+[ 839]    08F2: 89 05                                 	MOV [DI], AX
+[ 840]    08F4: 8B 04                                 	MOV AX, [SI]
+[ 841]    08F6: 89 45 06                              	MOV [DI+6], AX
+[ 842]        :                                       	;/**
+[ 843]        :                                       	;/**
+[ 844]    08F9: BF 13 01                              	LEA DI, LEFT
+[ 845]    08FC: 8B 45 02                              	MOV AX, [DI+2]
+[ 846]    08FF: 89 04                                 	MOV [SI], AX
+[ 847]    0901: 8B 45 04                              	MOV AX, [DI+4]
+[ 848]    0904: 89 44 02                              	MOV [SI+2], AX
+[ 849]        :                                       ;/**;/**
+[ 850]        :                                       ;/**;/**
+[ 851]    0907: A1 37 01                              	MOV AX, TEMP0
+[ 852]    090A: 89 45 04                              	MOV [DI+4], AX
+[ 853]    090D: A1 33 01                              	MOV AX, TEMP1
+[ 854]    0910: 89 45 02                              	MOV [DI+2], AX
+[ 855]        :                                       ;/****************/
+[ 856]        :                                       	
+[ 857]        :                                       ;/LEFT SIDE ROTATE*/
+[ 858]    0913: BE 0B 01                              	LEA SI, FRONT
+[ 859]    0916: 8B 04                                 	MOV AX, [SI]
+[ 860]    0918: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[ 861]    091B: 8B 44 02                              	MOV AX, [SI+2] ; AX = U1
+[ 862]    091E: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[ 863]    0920: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[ 864]    0923: 89 44 02                              	MOV  [SI+2], AX ; U1 = U2 = AX
+[ 865]    0926: 8B 44 06                              	MOV AX, [SI+6]
+[ 866]    0929: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[ 867]    092C: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[ 868]    092F: 89 44 06                              	MOV [SI+6], AX ; U3 = U0 = AX
+[ 869]        :                                       	;/********/
+[ 870]    0932: B8 66 00                              	mov Ax, 'f'
+[ 871]    0935: E8 35 FF                              	call SaveMoves
+[ 872]    0938: E8 1F FF                              	call Checker
+[ 873]        :                                       	;/********/
+[ 874]    093B: 5F                                    	POP DI
+[ 875]    093C: 5E                                    	POP SI
+[ 876]    093D: 5A                                    	POP DX
+[ 877]    093E: 59                                    	POP CX
+[ 878]    093F: 5B                                    	POP BX
+[ 879]    0940: 58                                    	POP AX
+[ 880]    0941: C3                                    	RET
+[ 881]        :                                       FI ENDP;/***********/
+[ 882]    0942:                                       MAINEXIT2:
+[ 883]    0942: E9 F8 00                              JMP MAINEXIT3
+[ 884]    0945:                                       F PROC
+[ 885]    0945: 50                                    	PUSH AX
+[ 886]    0946: 53                                    	PUSH BX
+[ 887]    0947: 51                                    	PUSH CX
+[ 888]    0948: 52                                    	PUSH DX
+[ 889]    0949: 56                                    	PUSH SI
+[ 890]    094A: 57                                    	PUSH DI
+[ 891]        :                                       	;/********/
+[ 892]        :                                       	;/********/
+[ 893]    094B: B8 00 00                              	MOV AX, 0
+[ 894]    094E: BE 03 01                              	LEA SI, UP
+[ 895]    0951: 8B 44 06                              	MOV AX, [SI+6]
+[ 896]    0954: A3 37 01                              	MOV TEMP0 , AX
+[ 897]    0957: 8B 44 04                              	MOV AX, [SI+4]
+[ 898]    095A: A3 33 01                              	MOV TEMP1 , AX
+[ 899]        :                                       	;/**********/
+[ 900]        :                                       	;/**********/
+[ 901]    095D: BF 13 01                              	LEA DI, LEFT
+[ 902]    0960: 8B 45 04                              	MOV AX, [DI+4]
+[ 903]    0963: 89 44 06                              	MOV [SI+6], AX
+[ 904]    0966: 8B 45 02                              	MOV AX, [DI+2]
+[ 905]    0969: 89 44 04                              	MOV [SI+4], AX
+[ 906]        :                                       	;/*****************/
+[ 907]        :                                       		
+[ 908]    096C: BE 2B 01                              	LEA SI, DOWN
+[ 909]    096F: 8B 04                                 	MOV AX, [SI]
+[ 910]    0971: 89 45 02                              	MOV [DI+2], AX
+[ 911]    0974: 8B 44 02                              	MOV AX, [SI+2]
+[ 912]    0977: 89 45 04                              	MOV [DI+4], AX
+[ 913]        :                                       	;/**
+[ 914]    097A: BF 1B 01                              	LEA DI, RIGHT
+[ 915]    097D: 8B 45 06                              	MOV AX, [DI+6]
+[ 916]    0980: 89 04                                 	MOV [SI], AX
+[ 917]    0982: 8B 05                                 	MOV AX, [DI]
+[ 918]    0984: 89 44 02                              	MOV [SI+2], AX
+[ 919]        :                                       ;/**;/**
+[ 920]        :                                       ;/**;/**
+[ 921]    0987: A1 37 01                              	MOV AX, TEMP0
+[ 922]    098A: 89 05                                 	MOV [DI], AX
+[ 923]    098C: A1 33 01                              	MOV AX, TEMP1
+[ 924]    098F: 89 45 06                              	MOV [DI+6], AX
+[ 925]        :                                       ;/****************/
+[ 926]        :                                       
+[ 927]        :                                       ;/*****************/
+[ 928]        :                                       ;/LEFT SIDE ROTATE*/
+[ 929]    0992: BE 0B 01                              	LEA SI, FRONT
+[ 930]    0995: 8B 04                                 	MOV AX, [SI]
+[ 931]    0997: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[ 932]    099A: 8B 44 06                              	MOV AX, [SI+6] ; AX = U1
+[ 933]    099D: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[ 934]    099F: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[ 935]    09A2: 89 44 06                              	MOV  [SI+6], AX ; U1 = U2 = AX
+[ 936]    09A5: 8B 44 02                              	MOV AX, [SI+2]
+[ 937]    09A8: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[ 938]    09AB: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[ 939]    09AE: 89 44 02                              	MOV [SI+2], AX ; U3 = U0 = AX
+[ 940]        :                                       	;/********/
+[ 941]    09B1: B8 46 00                              	       mov Ax, 'F'
+[ 942]    09B4: E8 B6 FE                              	call SaveMoves
+[ 943]    09B7: E8 A0 FE                              	call Checker
+[ 944]        :                                       	;/********/
+[ 945]    09BA: 5F                                    	POP DI
+[ 946]    09BB: 5E                                    	POP SI
+[ 947]    09BC: 5A                                    	POP DX
+[ 948]    09BD: 59                                    	POP CX
+[ 949]    09BE: 5B                                    	POP BX
+[ 950]    09BF: 58                                    	POP AX
+[ 951]    09C0: C3                                    	RET
+[ 952]        :                                       F ENDP
+[ 953]        :                                       ;/***********/
+[ 954]    09C1:                                       B PROC
+[ 955]    09C1: 50                                    	PUSH AX
+[ 956]    09C2: 53                                    	PUSH BX
+[ 957]    09C3: 51                                    	PUSH CX
+[ 958]    09C4: 52                                    	PUSH DX
+[ 959]    09C5: 56                                    	PUSH SI
+[ 960]    09C6: 57                                    	PUSH DI
+[ 961]        :                                       	;/********/
+[ 962]        :                                       	;/********/
+[ 963]    09C7: B8 00 00                              	MOV AX, 0
+[ 964]    09CA: BE 03 01                              	LEA SI, UP
+[ 965]    09CD: 8B 04                                 	MOV AX, [SI]
+[ 966]    09CF: A3 37 01                              	MOV TEMP0 , AX
+[ 967]    09D2: 8B 44 02                              	MOV AX, [SI+2]
+[ 968]    09D5: A3 33 01                              	MOV TEMP1 , AX
+[ 969]        :                                       	;/**********/
+[ 970]        :                                       	;/**********/
+[ 971]    09D8: BF 1B 01                              	LEA DI, RIGHT
+[ 972]    09DB: 8B 45 02                              	MOV AX, [DI+2]
+[ 973]    09DE: 89 04                                 	MOV [SI], AX
+[ 974]    09E0: 8B 45 04                              	MOV AX, [DI+4]
+[ 975]    09E3: 89 44 02                              	MOV [SI+2], AX
+[ 976]        :                                       ;/*****************/
+[ 977]        :                                       ;/*****************/
+[ 978]        :                                       		
+[ 979]    09E6: BE 2B 01                              	LEA SI, DOWN
+[ 980]    09E9: 8B 44 06                              	MOV AX, [SI+6]
+[ 981]    09EC: 89 45 04                              	MOV [DI+4], AX
+[ 982]    09EF: 8B 44 04                              	MOV AX, [SI+4]
+[ 983]    09F2: 89 45 02                              	MOV [DI+2], AX
+[ 984]        :                                       ;/****************/
+[ 985]        :                                       ;/**
+[ 986]    09F5: BF 13 01                              	LEA DI, LEFT
+[ 987]    09F8: 8B 05                                 	MOV AX, [DI]
+[ 988]    09FA: 89 44 06                              	MOV [SI+6], AX
+[ 989]    09FD: 8B 45 06                              	MOV AX, [DI+6]
+[ 990]    0A00: 89 44 04                              	MOV [SI+4], AX
+[ 991]        :                                       ;/**;/**
+[ 992]        :                                       ;/**;/**
+[ 993]    0A03: A1 37 01                              	MOV AX, TEMP0
+[ 994]    0A06: 89 45 06                              	MOV [DI+6], AX
+[ 995]    0A09: A1 33 01                              	MOV AX, TEMP1
+[ 996]    0A0C: 89 05                                 	MOV [DI], AX
+[ 997]        :                                       	;/LEFT SIDE ROTATE*/
+[ 998]    0A0E: BE 23 01                              	LEA SI, BACK
+[ 999]    0A11: 8B 04                                 	MOV AX, [SI]
+[1000]    0A13: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1001]    0A16: 8B 44 06                              	MOV AX, [SI+6] ; AX = U1
+[1002]    0A19: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1003]    0A1B: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1004]    0A1E: 89 44 06                              	MOV  [SI+6], AX ; U1 = U2 = AX
+[1005]    0A21: 8B 44 02                              	MOV AX, [SI+2]
+[1006]    0A24: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1007]    0A27: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1008]    0A2A: 89 44 02                              	MOV [SI+2], AX ; U3 = U0 = AX
+[1009]        :                                       	;/********/
+[1010]    0A2D: B8 42 00                              	mov Ax, 'B'
+[1011]    0A30: E8 3A FE                              	call SaveMoves
+[1012]    0A33: E8 24 FE                              	call Checker
+[1013]        :                                       	;/********/
+[1014]    0A36: 5F                                    	POP DI
+[1015]    0A37: 5E                                    	POP SI
+[1016]    0A38: 5A                                    	POP DX
+[1017]    0A39: 59                                    	POP CX
+[1018]    0A3A: 5B                                    	POP BX
+[1019]    0A3B: 58                                    	POP AX
+[1020]    0A3C: C3                                    	RET
+[1021]        :                                       B ENDP
+[1022]        :                                       ;/***********/
+[1023]    0A3D:                                       MAINEXIT3:
+[1024]    0A3D: E9 FA 00                              JMP MAINEXIT4
+[1025]    0A40:                                       Bi PROC
+[1026]        :                                       
+[1027]    0A40: 50                                    	PUSH AX
+[1028]    0A41: 53                                    	PUSH BX
+[1029]    0A42: 51                                    	PUSH CX
+[1030]    0A43: 52                                    	PUSH DX
+[1031]    0A44: 56                                    	PUSH SI
+[1032]    0A45: 57                                    	PUSH DI
+[1033]        :                                       	;/********/
+[1034]        :                                       	;/********/
+[1035]    0A46: B8 00 00                              	MOV AX, 0
+[1036]    0A49: BE 03 01                              	LEA SI, UP
+[1037]    0A4C: 8B 04                                 	MOV AX, [SI]
+[1038]    0A4E: A3 37 01                              	MOV TEMP0 , AX
+[1039]    0A51: 8B 44 02                              	MOV AX, [SI+2]
+[1040]    0A54: A3 33 01                              	MOV TEMP1 , AX
+[1041]        :                                       	;/**********/
+[1042]        :                                       	;/**********/
+[1043]    0A57: BF 13 01                              	LEA DI, LEFT
+[1044]    0A5A: 8B 45 06                              	MOV AX, [DI+6]
+[1045]    0A5D: 89 04                                 	MOV [SI], AX
+[1046]    0A5F: 8B 05                                 	MOV AX, [DI]
+[1047]    0A61: 89 44 02                              	MOV [SI+2], AX
+[1048]        :                                       ;/*****************/
+[1049]        :                                       ;/*****************/
+[1050]        :                                       		
+[1051]    0A64: BE 2B 01                              	LEA SI, DOWN
+[1052]    0A67: 8B 44 06                              	MOV AX, [SI+6]
+[1053]    0A6A: 89 05                                 	MOV [DI], AX
+[1054]    0A6C: 8B 44 04                              	MOV AX, [SI+4]
+[1055]    0A6F: 89 45 06                              	MOV [DI+6], AX
+[1056]        :                                       ;/****************/
+[1057]        :                                       ;/**
+[1058]    0A72: BF 1B 01                              	LEA DI, RIGHT
+[1059]    0A75: 8B 45 04                              	MOV AX, [DI+4]
+[1060]    0A78: 89 44 06                              	MOV [SI+6], AX
+[1061]    0A7B: 8B 45 02                              	MOV AX, [DI+2]
+[1062]    0A7E: 89 44 04                              	MOV [SI+4], AX
+[1063]        :                                       ;/**;/**
+[1064]        :                                       ;/**;/**
+[1065]    0A81: A1 37 01                              	MOV AX, TEMP0
+[1066]    0A84: 89 45 02                              	MOV [DI+2], AX
+[1067]    0A87: A1 33 01                              	MOV AX, TEMP1
+[1068]    0A8A: 89 45 04                              	MOV [DI+4], AX
+[1069]        :                                       	;/*RIGHT SIDE ROTATE*/
+[1070]        :                                       
+[1071]        :                                       
+[1072]        :                                       	
+[1073]        :                                       	;/*RIGHT SIDE ROTATE*/	
+[1074]    0A8D: BE 23 01                              	LEA SI, BACK
+[1075]    0A90: 8B 04                                 	MOV AX, [SI]
+[1076]    0A92: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1077]    0A95: 8B 44 02                              	MOV AX, [SI+2] ; AX = U1
+[1078]    0A98: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1079]    0A9A: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1080]    0A9D: 89 44 02                              	MOV  [SI+2], AX ; U1 = U2 = AX
+[1081]    0AA0: 8B 44 06                              	MOV AX, [SI+6]
+[1082]    0AA3: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1083]    0AA6: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1084]    0AA9: 89 44 06                              	MOV [SI+6], AX ; U3 = U0 = AX
+[1085]        :                                       	
+[1086]        :                                       ;/********/
+[1087]    0AAC: B8 62 00                              mov Ax, 'b'
+[1088]    0AAF: E8 BB FD                              	call SaveMoves
+[1089]    0AB2: E8 A5 FD                              	call Checker
+[1090]    0AB5: 5F                                    	POP DI
+[1091]    0AB6: 5E                                    	POP SI
+[1092]    0AB7: 5A                                    	POP DX
+[1093]    0AB8: 59                                    	POP CX
+[1094]    0AB9: 5B                                    	POP BX
+[1095]    0ABA: 58                                    	POP AX
+[1096]    0ABB: C3                                    	RET
+[1097]        :                                       Bi ENDP
+[1098]        :                                       ;/***********/
+[1099]    0ABC:                                       Ri PROC
+[1100]        :                                       
+[1101]    0ABC: 50                                    	PUSH AX
+[1102]    0ABD: 53                                    	PUSH BX
+[1103]    0ABE: 51                                    	PUSH CX
+[1104]    0ABF: 52                                    	PUSH DX
+[1105]    0AC0: 56                                    	PUSH SI
+[1106]    0AC1: 57                                    	PUSH DI
+[1107]        :                                       	;/********/
+[1108]        :                                       	;/********/
+[1109]    0AC2: B8 00 00                              	MOV AX, 0
+[1110]    0AC5: BE 23 01                              	LEA SI, BACK
+[1111]    0AC8: 8B 04                                 	MOV AX, [SI]
+[1112]    0ACA: A3 37 01                              	MOV TEMP0 , AX
+[1113]    0ACD: 8B 44 06                              	MOV AX, [SI+6]
+[1114]    0AD0: A3 33 01                              	MOV TEMP1 , AX
+[1115]        :                                       	;/**********/
+[1116]        :                                       	;/**********/
+[1117]    0AD3: BF 2B 01                              	LEA DI, DOWN
+[1118]    0AD6: 8B 45 04                              	MOV AX, [DI+4]
+[1119]    0AD9: 89 04                                 	MOV [SI], AX
+[1120]    0ADB: 8B 45 02                              	MOV AX, [DI+2]
+[1121]    0ADE: 89 44 06                              	MOV [SI+6], AX
+[1122]        :                                       ;/*****************/
+[1123]        :                                       
+[1124]        :                                       ;/*****************/
+[1125]        :                                       		
+[1126]    0AE1: BE 0B 01                              	LEA SI, FRONT
+[1127]    0AE4: 8B 44 02                              	MOV AX, [SI+2]
+[1128]    0AE7: 89 45 02                              	MOV [DI+2], AX
+[1129]    0AEA: 8B 44 04                              	MOV AX, [SI+4]
+[1130]    0AED: 89 45 04                              	MOV [DI+4], AX
+[1131]        :                                       ;/****************/
+[1132]        :                                       ;/**
+[1133]    0AF0: BF 03 01                              	LEA DI, UP
+[1134]    0AF3: 8B 45 02                              	MOV AX, [DI+2]
+[1135]    0AF6: 89 44 02                              	MOV [SI+2], AX
+[1136]    0AF9: 8B 45 04                              	MOV AX, [DI+4]
+[1137]    0AFC: 89 44 04                              	MOV [SI+4], AX
+[1138]        :                                       ;/**;/**
+[1139]        :                                       ;/**;/**
+[1140]    0AFF: A1 37 01                              	MOV AX, TEMP0
+[1141]    0B02: 89 45 04                              	MOV [DI+4], AX
+[1142]    0B05: A1 33 01                              	MOV AX, TEMP1
+[1143]    0B08: 89 45 02                              	MOV [DI+2], AX
+[1144]        :                                       	;/*RIGHT SIDE ROTATE*/
+[1145]        :                                       	
+[1146]    0B0B: BE 1B 01                              	LEA SI, RIGHT
+[1147]    0B0E: 8B 04                                 	MOV AX, [SI]
+[1148]    0B10: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1149]    0B13: 8B 44 02                              	MOV AX, [SI+2] ; AX = U1
+[1150]    0B16: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1151]    0B18: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1152]    0B1B: 89 44 02                              	MOV  [SI+2], AX ; U1 = U2 = AX
+[1153]    0B1E: 8B 44 06                              	MOV AX, [SI+6]
+[1154]    0B21: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1155]    0B24: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1156]    0B27: 89 44 06                              	MOV [SI+6], AX ; U3 = U0 = AX
+[1157]        :                                       	;/********/
+[1158]    0B2A: B8 72 00                              	mov Ax, 'r'
+[1159]    0B2D: E8 3D FD                              	call SaveMoves
+[1160]    0B30: E8 27 FD                              	call Checker
+[1161]    0B33: 5F                                    	POP DI
+[1162]    0B34: 5E                                    	POP SI
+[1163]    0B35: 5A                                    	POP DX
+[1164]    0B36: 59                                    	POP CX
+[1165]    0B37: 5B                                    	POP BX
+[1166]    0B38: 58                                    	POP AX
+[1167]    0B39: C3                                    	RET
+[1168]        :                                       Ri ENDP
+[1169]        :                                       ;/***********/
+[1170]    0B3A:                                       MAINEXIT4:
+[1171]    0B3A: E9 F8 00                              JMP MAINEXIT5
+[1172]        :                                       
+[1173]    0B3D:                                       R PROC
+[1174]    0B3D: 50                                    	PUSH AX
+[1175]    0B3E: 53                                    	PUSH BX
+[1176]    0B3F: 51                                    	PUSH CX
+[1177]    0B40: 52                                    	PUSH DX
+[1178]    0B41: 56                                    	PUSH SI
+[1179]    0B42: 57                                    	PUSH DI
+[1180]        :                                       	;/********/
+[1181]        :                                       	;/********/
+[1182]    0B43: B8 00 00                              	MOV AX, 0
+[1183]    0B46: BE 23 01                              	LEA SI, BACK
+[1184]    0B49: 8B 04                                 	MOV AX, [SI]
+[1185]    0B4B: A3 37 01                              	MOV TEMP0 , AX
+[1186]    0B4E: 8B 44 06                              	MOV AX, [SI+6]
+[1187]    0B51: A3 33 01                              	MOV TEMP1 , AX
+[1188]        :                                       	;/**********/
+[1189]        :                                       	;/**********/
+[1190]    0B54: BF 03 01                              	LEA DI, UP
+[1191]    0B57: 8B 45 04                              	MOV AX, [DI+4]
+[1192]    0B5A: 89 04                                 	MOV [SI], AX
+[1193]    0B5C: 8B 45 02                              	MOV AX, [DI+2]
+[1194]    0B5F: 89 44 06                              	MOV [SI+6], AX
+[1195]        :                                       ;/*****************/
+[1196]        :                                       ;/*****************/
+[1197]        :                                       		
+[1198]    0B62: BE 0B 01                              	LEA SI, FRONT
+[1199]    0B65: 8B 44 02                              	MOV AX, [SI+2]
+[1200]    0B68: 89 45 02                              	MOV [DI+2], AX
+[1201]    0B6B: 8B 44 04                              	MOV AX, [SI+4]
+[1202]    0B6E: 89 45 04                              	MOV [DI+4], AX
+[1203]        :                                       ;/****************/
+[1204]        :                                       ;/**
+[1205]    0B71: BF 2B 01                              	LEA DI, DOWN
+[1206]    0B74: 8B 45 02                              	MOV AX, [DI+2]
+[1207]    0B77: 89 44 02                              	MOV [SI+2], AX
+[1208]    0B7A: 8B 45 04                              	MOV AX, [DI+4]
+[1209]    0B7D: 89 44 04                              	MOV [SI+4], AX
+[1210]        :                                       ;/**;/**
+[1211]    0B80: A1 37 01                              	MOV AX, TEMP0
+[1212]    0B83: 89 45 04                              	MOV [DI+4], AX
+[1213]    0B86: A1 33 01                              	MOV AX, TEMP1
+[1214]    0B89: 89 45 02                              	MOV [DI+2], AX
+[1215]        :                                       	
+[1216]        :                                       	;/LEFT SIDE ROTATE*/
+[1217]    0B8C: BE 1B 01                              	LEA SI, RIGHT
+[1218]    0B8F: 8B 04                                 	MOV AX, [SI]
+[1219]    0B91: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1220]    0B94: 8B 44 06                              	MOV AX, [SI+6] ; AX = U1
+[1221]    0B97: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1222]    0B99: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1223]    0B9C: 89 44 06                              	MOV  [SI+6], AX ; U1 = U2 = AX
+[1224]    0B9F: 8B 44 02                              	MOV AX, [SI+2]
+[1225]    0BA2: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1226]    0BA5: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1227]    0BA8: 89 44 02                              	MOV [SI+2], AX ; U3 = U0 = AX
+[1228]        :                                       	;/********/
+[1229]    0BAB: B8 52 00                              	mov Ax, 'R'
+[1230]    0BAE: E8 BC FC                              	call SaveMoves
+[1231]    0BB1: E8 A6 FC                              	call Checker
+[1232]        :                                       	;/********/
+[1233]        :                                       	
+[1234]    0BB4: 5F                                    	POP DI
+[1235]    0BB5: 5E                                    	POP SI
+[1236]    0BB6: 5A                                    	POP DX
+[1237]    0BB7: 59                                    	POP CX
+[1238]    0BB8: 5B                                    	POP BX
+[1239]    0BB9: 58                                    	POP AX
+[1240]    0BBA: C3                                    	RET
+[1241]        :                                       R ENDP
+[1242]        :                                       
+[1243]        :                                       ;/********/
+[1244]    0BBB:                                       L PROC
+[1245]    0BBB: 50                                    	PUSH AX
+[1246]    0BBC: 53                                    	PUSH BX
+[1247]    0BBD: 51                                    	PUSH CX
+[1248]    0BBE: 52                                    	PUSH DX
+[1249]    0BBF: 56                                    	PUSH SI
+[1250]    0BC0: 57                                    	PUSH DI
+[1251]        :                                       	;/********/
+[1252]        :                                       	;/********/
+[1253]    0BC1: B8 00 00                              	MOV AX, 0
+[1254]    0BC4: BE 23 01                              	LEA SI, BACK
+[1255]    0BC7: 8B 44 02                              	MOV AX, [SI+2]
+[1256]    0BCA: A3 37 01                              	MOV TEMP0 , AX
+[1257]    0BCD: 8B 44 04                              	MOV AX, [SI+4]
+[1258]    0BD0: A3 33 01                              	MOV TEMP1 , AX
+[1259]        :                                       	;/**********/
+[1260]        :                                       	;/**********/
+[1261]    0BD3: BF 2B 01                              	LEA DI, DOWN
+[1262]    0BD6: 8B 05                                 	MOV AX, [DI]
+[1263]    0BD8: 89 44 04                              	MOV [SI+4], AX
+[1264]    0BDB: 8B 45 06                              	MOV AX, [DI+6]
+[1265]    0BDE: 89 44 02                              	MOV [SI+2], AX
+[1266]        :                                       ;/*****************/
+[1267]        :                                       ;/*****************/
+[1268]        :                                       		
+[1269]    0BE1: BE 0B 01                              	LEA SI, FRONT
+[1270]    0BE4: 8B 04                                 	MOV AX, [SI]
+[1271]    0BE6: 89 05                                 	MOV [DI], AX
+[1272]    0BE8: 8B 44 06                              	MOV AX, [SI+6]
+[1273]    0BEB: 89 45 06                              	MOV [DI+6], AX
+[1274]        :                                       ;/**;/**
+[1275]    0BEE: BF 03 01                              	LEA DI, UP
+[1276]    0BF1: 8B 05                                 	MOV AX, [DI]
+[1277]    0BF3: 89 04                                 	MOV [SI], AX
+[1278]    0BF5: 8B 45 06                              	MOV AX, [DI+6]
+[1279]    0BF8: 89 44 06                              	MOV [SI+6], AX
+[1280]        :                                       ;/**
+[1281]        :                                       ;/**
+[1282]    0BFB: A1 37 01                              	MOV AX, TEMP0
+[1283]    0BFE: 89 45 06                              	MOV [DI+6], AX
+[1284]    0C01: A1 33 01                              	MOV AX, TEMP1
+[1285]    0C04: 89 05                                 	MOV [DI], AX
+[1286]        :                                       	;/LEFT SIDE ROTATE*/
+[1287]    0C06: BE 13 01                              	LEA SI, LEFT
+[1288]    0C09: 8B 04                                 	MOV AX, [SI]
+[1289]    0C0B: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1290]    0C0E: 8B 44 06                              	MOV AX, [SI+6] ; AX = U1
+[1291]    0C11: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1292]    0C13: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1293]    0C16: 89 44 06                              	MOV  [SI+6], AX ; U1 = U2 = AX
+[1294]    0C19: 8B 44 02                              	MOV AX, [SI+2]
+[1295]    0C1C: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1296]    0C1F: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1297]    0C22: 89 44 02                              	MOV [SI+2], AX ; U3 = U0 = AX
+[1298]        :                                       	;/********/
+[1299]    0C25: B8 4C 00                              	mov Ax, 'L'
+[1300]    0C28: E8 42 FC                              	call SaveMoves
+[1301]    0C2B: E8 2C FC                              	call Checker
+[1302]        :                                       ;/********/
+[1303]    0C2E: 5F                                    	POP DI
+[1304]    0C2F: 5E                                    	POP SI
+[1305]    0C30: 5A                                    	POP DX
+[1306]    0C31: 59                                    	POP CX
+[1307]    0C32: 5B                                    	POP BX
+[1308]    0C33: 58                                    	POP AX
+[1309]    0C34: C3                                    	RET
+[1310]        :                                       L ENDP
+[1311]        :                                       ;/********/
+[1312]    0C35:                                       MAINEXIT5:
+[1313]    0C35: E9 FA 00                              JMP MAINEXIT6
+[1314]    0C38:                                       Li PROC
+[1315]        :                                       
+[1316]    0C38: 50                                    	PUSH AX
+[1317]    0C39: 53                                    	PUSH BX
+[1318]    0C3A: 51                                    	PUSH CX
+[1319]    0C3B: 52                                    	PUSH DX
+[1320]    0C3C: 56                                    	PUSH SI
+[1321]    0C3D: 57                                    	PUSH DI
+[1322]        :                                       	;/********/
+[1323]        :                                       	;/********/
+[1324]    0C3E: B8 00 00                              	MOV AX, 0
+[1325]    0C41: BE 23 01                              	LEA SI, BACK
+[1326]    0C44: 8B 44 02                              	MOV AX, [SI+2]
+[1327]    0C47: A3 37 01                              	MOV TEMP0 , AX
+[1328]    0C4A: 8B 44 04                              	MOV AX, [SI+4]
+[1329]    0C4D: A3 33 01                              	MOV TEMP1 , AX
+[1330]        :                                       	;/**********/
+[1331]        :                                       	;/**********/
+[1332]    0C50: BF 03 01                              	LEA DI, UP
+[1333]    0C53: 8B 05                                 	MOV AX, [DI]
+[1334]    0C55: 89 44 04                              	MOV [SI+4], AX
+[1335]    0C58: 8B 45 06                              	MOV AX, [DI+6]
+[1336]    0C5B: 89 44 02                              	MOV [SI+2], AX
+[1337]        :                                       ;/*****************/;/*****************/
+[1338]        :                                       		
+[1339]    0C5E: BE 0B 01                              	LEA SI, FRONT
+[1340]    0C61: 8B 04                                 	MOV AX, [SI]
+[1341]    0C63: 89 05                                 	MOV [DI], AX
+[1342]    0C65: 8B 44 06                              	MOV AX, [SI+6]
+[1343]    0C68: 89 45 06                              	MOV [DI+6], AX
+[1344]        :                                       ;/**;/**
+[1345]    0C6B: BF 2B 01                              	LEA DI, DOWN
+[1346]    0C6E: 8B 05                                 	MOV AX, [DI]
+[1347]    0C70: 89 04                                 	MOV [SI], AX
+[1348]    0C72: 8B 45 06                              	MOV AX, [DI+6]
+[1349]    0C75: 89 44 06                              	MOV [SI+6], AX
+[1350]        :                                       ;/**;/**
+[1351]    0C78: A1 37 01                              	MOV AX, TEMP0
+[1352]    0C7B: 89 45 06                              	MOV [DI+6], AX
+[1353]    0C7E: A1 33 01                              	MOV AX, TEMP1
+[1354]    0C81: 89 05                                 	MOV [DI], AX
+[1355]        :                                       	
+[1356]        :                                       ;/*UP SIDE ROTATE*/
+[1357]        :                                       	
+[1358]    0C83: BE 13 01                              	LEA SI, LEFT
+[1359]    0C86: 8B 04                                 	MOV AX, [SI]
+[1360]    0C88: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1361]    0C8B: 8B 44 02                              	MOV AX, [SI+2] ; AX = U1
+[1362]    0C8E: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1363]    0C90: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1364]    0C93: 89 44 02                              	MOV  [SI+2], AX ; U1 = U2 = AX
+[1365]    0C96: 8B 44 06                              	MOV AX, [SI+6]
+[1366]    0C99: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1367]    0C9C: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1368]    0C9F: 89 44 06                              	MOV [SI+6], AX ; U3 = U0 = AX
+[1369]        :                                       
+[1370]        :                                       	;/********/
+[1371]    0CA2: B8 6C 00                              	mov Ax, 'l'
+[1372]    0CA5: E8 C5 FB                              	call SaveMoves
+[1373]    0CA8: E8 AF FB                              	call Checker
+[1374]    0CAB: 5F                                    	POP DI
+[1375]    0CAC: 5E                                    	POP SI
+[1376]    0CAD: 5A                                    	POP DX
+[1377]    0CAE: 59                                    	POP CX
+[1378]    0CAF: 5B                                    	POP BX
+[1379]    0CB0: 58                                    	POP AX
+[1380]    0CB1: C3                                    	RET
+[1381]        :                                       Li ENDP
+[1382]        :                                       
+[1383]        :                                       ;/**********/
+[1384]    0CB2:                                       iD PROC
+[1385]        :                                       
+[1386]    0CB2: 50                                    	PUSH AX
+[1387]    0CB3: 53                                    	PUSH BX
+[1388]    0CB4: 51                                    	PUSH CX
+[1389]    0CB5: 52                                    	PUSH DX
+[1390]    0CB6: 56                                    	PUSH SI
+[1391]    0CB7: 57                                    	PUSH DI
+[1392]        :                                       	;/********/
+[1393]    0CB8: B8 00 00                              	MOV AX, 0
+[1394]    0CBB: BE 23 01                              	LEA SI, BACK
+[1395]    0CBE: 8B 44 06                              	MOV AX, [SI+6]
+[1396]    0CC1: A3 37 01                              	MOV TEMP0 , AX
+[1397]    0CC4: 8B 44 04                              	MOV AX, [SI+4]
+[1398]    0CC7: A3 33 01                              	MOV TEMP1 , AX
+[1399]        :                                       	;/*************/
+[1400]        :                                       	
+[1401]        :                                       	;/**********/
+[1402]    0CCA: BF 13 01                              	LEA DI, LEFT
+[1403]    0CCD: 8B 45 06                              	MOV AX, [DI+6]
+[1404]    0CD0: 89 44 06                              	MOV [SI+6], AX
+[1405]    0CD3: 8B 45 04                              	MOV AX, [DI+4]
+[1406]    0CD6: 89 44 04                              	MOV [SI+4], AX
+[1407]        :                                       	;/*****************/
+[1408]        :                                       		
+[1409]    0CD9: BE 0B 01                              	LEA SI, FRONT
+[1410]    0CDC: 8B 44 06                              	MOV AX, [SI+6]
+[1411]    0CDF: 89 45 06                              	MOV [DI+6], AX
+[1412]    0CE2: 8B 44 04                              	MOV AX, [SI+4]
+[1413]    0CE5: 89 45 04                              	MOV [DI+4], AX
+[1414]        :                                       ;/**;/**
+[1415]    0CE8: BF 1B 01                              	LEA DI, RIGHT
+[1416]    0CEB: 8B 45 06                              	MOV AX, [DI+6]
+[1417]    0CEE: 89 44 06                              	MOV [SI+6], AX
+[1418]    0CF1: 8B 45 04                              	MOV AX, [DI+4]
+[1419]    0CF4: 89 44 04                              	MOV [SI+4], AX
+[1420]        :                                       ;/**;/**
+[1421]    0CF7: A1 37 01                              	MOV AX, TEMP0
+[1422]    0CFA: 89 45 06                              	MOV [DI+6], AX
+[1423]    0CFD: A1 33 01                              	MOV AX, TEMP1
+[1424]    0D00: 89 45 04                              	MOV [DI+4], AX
+[1425]        :                                       	
+[1426]        :                                       	;/*UP SIDE ROTATE*/
+[1427]        :                                       	
+[1428]    0D03: BE 2B 01                              	LEA SI, DOWN
+[1429]    0D06: 8B 04                                 	MOV AX, [SI]
+[1430]    0D08: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1431]    0D0B: 8B 44 02                              	MOV AX, [SI+2] ; AX = U1
+[1432]    0D0E: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1433]    0D10: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1434]    0D13: 89 44 02                              	MOV  [SI+2], AX ; U1 = U2 = AX
+[1435]    0D16: 8B 44 06                              	MOV AX, [SI+6]
+[1436]    0D19: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1437]    0D1C: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1438]    0D1F: 89 44 06                              	MOV [SI+6], AX ; U3 = U0 = AX
+[1439]        :                                       
+[1440]        :                                       ;/********/
+[1441]    0D22: B8 64 00                              mov Ax, 'd'
+[1442]    0D25: E8 45 FB                              	call SaveMoves
+[1443]    0D28: E8 2F FB                              	call Checker
+[1444]    0D2B: 5F                                    	POP DI
+[1445]    0D2C: 5E                                    	POP SI
+[1446]    0D2D: 5A                                    	POP DX
+[1447]    0D2E: 59                                    	POP CX
+[1448]    0D2F: 5B                                    	POP BX
+[1449]    0D30: 58                                    	POP AX
+[1450]    0D31: C3                                    	RET
+[1451]        :                                       iD ENDP
+[1452]    0D32:                                       MAINEXIT6:
+[1453]    0D32: E9 F3 00                              JMP MAINEXIT7
+[1454]        :                                       ;/********/
+[1455]    0D35:                                       Ui PROC
+[1456]        :                                       
+[1457]    0D35: 50                                    	PUSH AX
+[1458]    0D36: 53                                    	PUSH BX
+[1459]    0D37: 51                                    	PUSH CX
+[1460]    0D38: 52                                    	PUSH DX
+[1461]    0D39: 56                                    	PUSH SI
+[1462]    0D3A: 57                                    	PUSH DI
+[1463]        :                                       	;/********/
+[1464]    0D3B: B8 00 00                              	MOV AX, 0
+[1465]        :                                       	;MOV SI, 0
+[1466]    0D3E: BE 23 01                              	LEA SI, BACK ; SI = &B
+[1467]    0D41: 8B 04                                 	MOV AX, [SI] ;
+[1468]    0D43: A3 37 01                              	MOV TEMP0, AX; TEMP0 = B[0]
+[1469]        :                                       	
+[1470]    0D46: 8B 44 02                              	MOV AX, [SI+2] ; AX = B[1]
+[1471]    0D49: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = B[1]
+[1472]        :                                       
+[1473]        :                                       	;MOV DI, 0
+[1474]    0D4C: BF 1B 01                              	LEA DI, RIGHT
+[1475]    0D4F: 8B 05                                 	MOV AX, [DI]
+[1476]    0D51: 89 04                                 	MOV [SI], AX; B[0] = R[0]
+[1477]    0D53: 8B 45 02                              	MOV AX, [DI+2]
+[1478]    0D56: 89 44 02                              	MOV [SI+2], AX ;B1 = R1
+[1479]        :                                       	
+[1480]        :                                       	;MOV SI, 0
+[1481]    0D59: BE 0B 01                              	LEA SI, FRONT
+[1482]    0D5C: 8B 04                                 	MOV AX, [SI]
+[1483]    0D5E: 89 05                                 	MOV [DI], AX ; R0 = F0
+[1484]        :                                       	
+[1485]    0D60: 8B 44 02                              	MOV AX, [SI+2]
+[1486]    0D63: 89 45 02                              	MOV [DI+2], AX ; R1 = F1
+[1487]        :                                       	
+[1488]    0D66: BF 13 01                              	LEA DI, LEFT
+[1489]    0D69: 8B 05                                 	MOV AX, [DI] ; AX = L0
+[1490]    0D6B: 89 04                                 	MOV [SI], AX ; F0 = L0
+[1491]    0D6D: 8B 45 02                              	MOV AX, [DI+2]
+[1492]    0D70: 89 44 02                              	MOV [SI+2], AX
+[1493]        :                                       	
+[1494]    0D73: A1 37 01                              	MOV AX, TEMP0
+[1495]    0D76: 89 05                                 	MOV [DI], AX; L0 = TEMP0
+[1496]    0D78: A1 33 01                              	MOV AX, TEMP1
+[1497]    0D7B: 89 45 02                              	MOV [DI+2], AX ; L1 = TEMP1
+[1498]        :                                       	;/*UP SIDE ROTATE*/
+[1499]        :                                       	
+[1500]    0D7E: BE 03 01                              	LEA SI, UP
+[1501]    0D81: 8B 04                                 	MOV AX, [SI]
+[1502]    0D83: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1503]    0D86: 8B 44 02                              	MOV AX, [SI+2] ; AX = U1
+[1504]    0D89: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1505]    0D8B: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1506]    0D8E: 89 44 02                              	MOV  [SI+2], AX ; U1 = U2 = AX
+[1507]    0D91: 8B 44 06                              	MOV AX, [SI+6]
+[1508]    0D94: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1509]    0D97: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1510]    0D9A: 89 44 06                              	MOV [SI+6], AX ; U3 = U0 = AX
+[1511]        :                                       
+[1512]        :                                       	;/********/
+[1513]    0D9D: B8 75 00                              	mov Ax, 'u'
+[1514]    0DA0: E8 CA FA                              	call SaveMoves
+[1515]    0DA3: E8 B4 FA                              	call Checker
+[1516]    0DA6: 5F                                    	POP DI
+[1517]    0DA7: 5E                                    	POP SI
+[1518]    0DA8: 5A                                    	POP DX
+[1519]    0DA9: 59                                    	POP CX
+[1520]    0DAA: 5B                                    	POP BX
+[1521]    0DAB: 58                                    	POP AX
+[1522]    0DAC: C3                                    	RET
+[1523]        :                                       Ui ENDP
+[1524]        :                                       
+[1525]    0DAD:                                       U PROC
+[1526]        :                                       
+[1527]    0DAD: 50                                    	PUSH AX
+[1528]    0DAE: 53                                    	PUSH BX
+[1529]    0DAF: 51                                    	PUSH CX
+[1530]    0DB0: 52                                    	PUSH DX
+[1531]    0DB1: 56                                    	PUSH SI
+[1532]    0DB2: 57                                    	PUSH DI
+[1533]        :                                       	;/********/
+[1534]    0DB3: B8 00 00                              	MOV AX, 0
+[1535]    0DB6: B8 00 00                              	MOV AX, 0
+[1536]        :                                       	;MOV SI, 0
+[1537]    0DB9: BE 23 01                              	LEA SI, BACK ; SI = &B
+[1538]    0DBC: 8B 04                                 	MOV AX, [SI] ;
+[1539]    0DBE: A3 37 01                              	MOV TEMP0, AX; TEMP0 = B[0]
+[1540]        :                                       	
+[1541]    0DC1: 8B 44 02                              	MOV AX, [SI+2] ; AX = B[1]
+[1542]    0DC4: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = B[1]
+[1543]        :                                       	;/***********/
+[1544]        :                                       	;MOV DI, 0
+[1545]    0DC7: BF 13 01                              	LEA DI, LEFT
+[1546]    0DCA: 8B 05                                 	MOV AX, [DI]
+[1547]    0DCC: 89 04                                 	MOV [SI], AX; B[0] = R[0]
+[1548]    0DCE: 8B 45 02                              	MOV AX, [DI+2]
+[1549]    0DD1: 89 44 02                              	MOV [SI+2], AX ;B1 = R1
+[1550]        :                                       	;/******/
+[1551]        :                                       	
+[1552]    0DD4: BE 0B 01                              	LEA SI, FRONT
+[1553]    0DD7: 8B 04                                 	MOV AX, [SI]
+[1554]    0DD9: 89 05                                 	MOV [DI], AX ; R0 = F0
+[1555]        :                                       	
+[1556]    0DDB: 8B 44 02                              	MOV AX, [SI+2]
+[1557]    0DDE: 89 45 02                              	MOV [DI+2], AX ; R1 = F1
+[1558]        :                                       	;/*********/
+[1559]    0DE1: BF 1B 01                              	LEA DI, RIGHT
+[1560]    0DE4: 8B 05                                 	MOV AX, [DI] ; AX = L0
+[1561]    0DE6: 89 04                                 	MOV [SI], AX ; F0 = L0
+[1562]    0DE8: 8B 45 02                              	MOV AX, [DI+2]
+[1563]    0DEB: 89 44 02                              	MOV [SI+2], AX
+[1564]        :                                       	
+[1565]    0DEE: A1 37 01                              	MOV AX, TEMP0
+[1566]    0DF1: 89 05                                 	MOV [DI], AX; R0 = TEMP0
+[1567]    0DF3: A1 33 01                              	MOV AX, TEMP1
+[1568]    0DF6: 89 45 02                              	MOV [DI+2], AX ; R1 = TEMP1
+[1569]        :                                       	
+[1570]        :                                       	
+[1571]        :                                       	;/*UP SIDE ROTATE*/
+[1572]        :                                       	
+[1573]    0DF9: BE 03 01                              	LEA SI, UP
+[1574]    0DFC: 8B 04                                 	MOV AX, [SI]
+[1575]    0DFE: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1576]    0E01: 8B 44 06                              	MOV AX, [SI+6] ; AX = U1
+[1577]    0E04: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1578]    0E06: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1579]    0E09: 89 44 06                              	MOV  [SI+6], AX ; U1 = U2 = AX
+[1580]    0E0C: 8B 44 02                              	MOV AX, [SI+2]
+[1581]    0E0F: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1582]    0E12: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1583]    0E15: 89 44 02                              	MOV [SI+2], AX ; U3 = U0 = AX
+[1584]        :                                       	;/********/
+[1585]    0E18: B8 55 00                              	mov Ax, 'U'
+[1586]    0E1B: E8 4F FA                              	call SaveMoves
+[1587]    0E1E: E8 39 FA                              	call Checker
+[1588]    0E21: 5F                                    	POP DI
+[1589]    0E22: 5E                                    	POP SI
+[1590]    0E23: 5A                                    	POP DX
+[1591]    0E24: 59                                    	POP CX
+[1592]    0E25: 5B                                    	POP BX
+[1593]    0E26: 58                                    	POP AX
+[1594]    0E27: C3                                    	RET
+[1595]        :                                       U ENDP
+[1596]    0E28:                                       MAINEXIT7:
+[1597]    0E28: E9 85 01                              JMP MAINEXIT8
+[1598]        :                                       
+[1599]    0E2B:                                       PRINTER PROC
+[1600]    0E2B: 50                                    push ax
+[1601]    0E2C: 53                                    push bx
+[1602]    0E2D: 51                                    push cx
+[1603]    0E2E: 52                                    push dx
+[1604]    0E2F: 56                                    push si
+[1605]    0E30: 57                                    push di
+[1606]        :                                       ;PRINT NEW LINE
+[1607]    0E31: B4 02                                 MOV AH,2
+[1608]    0E33: B2 0D                                 MOV DL, 0DH; CARRIAGE RETURN
+[1609]    0E35: CD 21                                 INT 21H
+[1610]        :                                       
+[1611]    0E37: B2 0A                                 MOV DL, 0AH; lINE FEED
+[1612]    0E39: CD 21                                 INT 21H
+[1613]        :                                       ;NEWLINE CLOSED
+[1614]        :                                       
+[1615]        :                                       ;UP
+[1616]    0E3B: BE 03 01                              LEA SI, UP
+[1617]    0E3E: 8B 1C                                 MOV BX, [SI]
+[1618]        :                                       ;OUPUT
+[1619]    0E40: 8A D3                                 MOV DL, BL
+[1620]    0E42: B4 02                                 MOV AH,2
+[1621]    0E44: CD 21                                 INT 21H
+[1622]    0E46: 8B 5C 02                              MOV BX, [SI+2]
+[1623]        :                                       ;OUPUT
+[1624]    0E49: 8A D3                                 MOV DL, BL
+[1625]    0E4B: B4 02                                 MOV AH,2
+[1626]    0E4D: CD 21                                 INT 21H
+[1627]    0E4F: 8B 5C 04                              MOV BX, [SI+4]
+[1628]        :                                       ;OUPUT
+[1629]    0E52: 8A D3                                 MOV DL, BL
+[1630]    0E54: B4 02                                 MOV AH,2
+[1631]    0E56: CD 21                                 INT 21H
+[1632]    0E58: 8B 5C 06                              MOV BX, [SI+6]
+[1633]        :                                       ;OUPUT
+[1634]    0E5B: 8A D3                                 MOV DL, BL
+[1635]    0E5D: B4 02                                 MOV AH,2
+[1636]    0E5F: CD 21                                 INT 21H
+[1637]        :                                       ; LEFT
+[1638]        :                                       
+[1639]    0E61: BE 13 01                              LEA SI, LEFT
+[1640]    0E64: 8B 1C                                 MOV BX, [SI]
+[1641]        :                                       ;OUPUT
+[1642]    0E66: 8A D3                                 MOV DL, BL
+[1643]    0E68: B4 02                                 MOV AH,2
+[1644]    0E6A: CD 21                                 INT 21H
+[1645]    0E6C: 8B 5C 02                              MOV BX, [SI+2]
+[1646]        :                                       ;OUPUT
+[1647]    0E6F: 8A D3                                 MOV DL, BL
+[1648]    0E71: B4 02                                 MOV AH,2
+[1649]    0E73: CD 21                                 INT 21H
+[1650]    0E75: 8B 5C 04                              MOV BX, [SI+4]
+[1651]        :                                       ;OUPUT
+[1652]    0E78: 8A D3                                 MOV DL, BL
+[1653]    0E7A: B4 02                                 MOV AH,2
+[1654]    0E7C: CD 21                                 INT 21H
+[1655]    0E7E: 8B 5C 06                              MOV BX, [SI+6]
+[1656]        :                                       ;OUPUT
+[1657]    0E81: 8A D3                                 MOV DL, BL
+[1658]    0E83: B4 02                                 MOV AH,2
+[1659]    0E85: CD 21                                 INT 21H
+[1660]        :                                       	
+[1661]        :                                       ;FRONT
+[1662]        :                                       
+[1663]    0E87: BE 0B 01                              LEA SI, FRONT
+[1664]    0E8A: 8B 1C                                 MOV BX, [SI]
+[1665]        :                                       ;OUPUT
+[1666]    0E8C: 8A D3                                 MOV DL, BL
+[1667]    0E8E: B4 02                                 MOV AH,2
+[1668]    0E90: CD 21                                 INT 21H
+[1669]    0E92: 8B 5C 02                              MOV BX, [SI+2]
+[1670]        :                                       ;OUPUT
+[1671]    0E95: 8A D3                                 MOV DL, BL
+[1672]    0E97: B4 02                                 MOV AH,2
+[1673]    0E99: CD 21                                 INT 21H
+[1674]    0E9B: 8B 5C 04                              MOV BX, [SI+4]
+[1675]        :                                       ;OUPUT
+[1676]    0E9E: 8A D3                                 MOV DL, BL
+[1677]    0EA0: B4 02                                 MOV AH,2
+[1678]    0EA2: CD 21                                 INT 21H
+[1679]    0EA4: 8B 5C 06                              MOV BX, [SI+6]
+[1680]        :                                       ;OUPUT
+[1681]    0EA7: 8A D3                                 MOV DL, BL
+[1682]    0EA9: B4 02                                 MOV AH,2
+[1683]    0EAB: CD 21                                 INT 21H
+[1684]        :                                       	
+[1685]        :                                       ;RIGHT
+[1686]    0EAD: BE 1B 01                              LEA SI, RIGHT
+[1687]    0EB0: 8B 1C                                 MOV BX, [SI]
+[1688]        :                                       ;OUPUT
+[1689]    0EB2: 8A D3                                 MOV DL, BL
+[1690]    0EB4: B4 02                                 MOV AH,2
+[1691]    0EB6: CD 21                                 INT 21H
+[1692]    0EB8: 8B 5C 02                              MOV BX, [SI+2]
+[1693]        :                                       ;OUPUT
+[1694]    0EBB: 8A D3                                 MOV DL, BL
+[1695]    0EBD: B4 02                                 MOV AH,2
+[1696]    0EBF: CD 21                                 INT 21H
+[1697]    0EC1: 8B 5C 04                              MOV BX, [SI+4]
+[1698]        :                                       ;OUPUT
+[1699]    0EC4: 8A D3                                 MOV DL, BL
+[1700]    0EC6: B4 02                                 MOV AH,2
+[1701]    0EC8: CD 21                                 INT 21H
+[1702]    0ECA: 8B 5C 06                              MOV BX, [SI+6]
+[1703]        :                                       ;OUPUT
+[1704]    0ECD: 8A D3                                 MOV DL, BL
+[1705]    0ECF: B4 02                                 MOV AH,2
+[1706]    0ED1: CD 21                                 INT 21H
+[1707]        :                                       
+[1708]        :                                       	;BACK
+[1709]    0ED3: BE 23 01                              LEA SI, BACK
+[1710]    0ED6: 8B 1C                                 MOV BX, [SI]
+[1711]        :                                       ;OUPUT
+[1712]    0ED8: 8A D3                                 MOV DL, BL
+[1713]    0EDA: B4 02                                 MOV AH,2
+[1714]    0EDC: CD 21                                 INT 21H
+[1715]    0EDE: 8B 5C 02                              MOV BX, [SI+2]
+[1716]        :                                       ;OUPUT
+[1717]    0EE1: 8A D3                                 MOV DL, BL
+[1718]    0EE3: B4 02                                 MOV AH,2
+[1719]    0EE5: CD 21                                 INT 21H
+[1720]    0EE7: 8B 5C 04                              MOV BX, [SI+4]
+[1721]        :                                       ;OUPUT
+[1722]    0EEA: 8A D3                                 MOV DL, BL
+[1723]    0EEC: B4 02                                 MOV AH,2
+[1724]    0EEE: CD 21                                 INT 21H
+[1725]    0EF0: 8B 5C 06                              MOV BX, [SI+6]
+[1726]        :                                       ;OUPUT
+[1727]    0EF3: 8A D3                                 MOV DL, BL
+[1728]    0EF5: B4 02                                 MOV AH,2
+[1729]    0EF7: CD 21                                 INT 21H
+[1730]        :                                       	;DOWN
+[1731]    0EF9: BE 2B 01                              LEA SI, DOWN
+[1732]    0EFC: 8B 1C                                 MOV BX, [SI]
+[1733]        :                                       ;OUPUT
+[1734]    0EFE: 8A D3                                 MOV DL, BL
+[1735]    0F00: B4 02                                 MOV AH,2
+[1736]    0F02: CD 21                                 INT 21H
+[1737]    0F04: 8B 5C 02                              MOV BX, [SI+2]
+[1738]        :                                       ;OUPUT
+[1739]    0F07: 8A D3                                 MOV DL, BL
+[1740]    0F09: B4 02                                 MOV AH,2
+[1741]    0F0B: CD 21                                 INT 21H
+[1742]    0F0D: 8B 5C 04                              MOV BX, [SI+4]
+[1743]        :                                       ;OUPUT
+[1744]    0F10: 8A D3                                 MOV DL, BL
+[1745]    0F12: B4 02                                 MOV AH,2
+[1746]    0F14: CD 21                                 INT 21H
+[1747]    0F16: 8B 5C 06                              MOV BX, [SI+6]
+[1748]        :                                       ;OUPUT
+[1749]    0F19: 8A D3                                 MOV DL, BL
+[1750]    0F1B: B4 02                                 MOV AH,2
+[1751]    0F1D: CD 21                                 INT 21H
+[1752]        :                                       	;PRINT NEW LINE
+[1753]    0F1F: B4 02                                 MOV AH,2
+[1754]    0F21: B2 0D                                 MOV DL, 0DH; CARRIAGE RETURN
+[1755]    0F23: CD 21                                 INT 21H
+[1756]        :                                       
+[1757]    0F25: B2 0A                                 MOV DL, 0AH; lINE FEED
+[1758]    0F27: CD 21                                 INT 21H
+[1759]        :                                       ;NEWLINE CLOSED
+[1760]        :                                       	
+[1761]    0F29: 5F                                    	pop di
+[1762]    0F2A: 5E                                    	pop si
+[1763]    0F2B: 5A                                    	pop dx
+[1764]    0F2C: 59                                    	pop cx
+[1765]    0F2D: 5B                                    	pop bx
+[1766]    0F2E: 58                                    	pop ax
+[1767]    0F2F: C3                                    	RET
+[1768]        :                                       PRINTER ENDP
+[1769]        :                                       
+[1770]    0F30:                                       D PROC
+[1771]        :                                       
+[1772]    0F30: 50                                    	PUSH AX
+[1773]    0F31: 53                                    	PUSH BX
+[1774]    0F32: 51                                    	PUSH CX
+[1775]    0F33: 52                                    	PUSH DX
+[1776]    0F34: 56                                    	PUSH SI
+[1777]    0F35: 57                                    	PUSH DI
+[1778]        :                                       	;/********/
+[1779]    0F36: B8 00 00                              	MOV AX, 0
+[1780]    0F39: BE 23 01                              	LEA SI, BACK
+[1781]    0F3C: 8B 44 06                              	MOV AX, [SI+6]
+[1782]    0F3F: A3 37 01                              	MOV TEMP0 , AX
+[1783]    0F42: 8B 44 04                              	MOV AX, [SI+4]
+[1784]    0F45: A3 33 01                              	MOV TEMP1 , AX
+[1785]        :                                       	
+[1786]        :                                       	;/**********/
+[1787]    0F48: BF 1B 01                              	LEA DI, RIGHT
+[1788]    0F4B: 8B 45 06                              	MOV AX, [DI+6]
+[1789]    0F4E: 89 44 06                              	MOV [SI+6], AX
+[1790]    0F51: 8B 45 04                              	MOV AX, [DI+4]
+[1791]    0F54: 89 44 04                              	MOV [SI+4], AX
+[1792]        :                                       ;/*****************/
+[1793]        :                                       		
+[1794]    0F57: BE 0B 01                              	LEA SI, FRONT
+[1795]    0F5A: 8B 44 06                              	MOV AX, [SI+6]
+[1796]    0F5D: 89 45 06                              	MOV [DI+6], AX
+[1797]    0F60: 8B 44 04                              	MOV AX, [SI+4]
+[1798]    0F63: 89 45 04                              	MOV [DI+4], AX
+[1799]        :                                       ;/**
+[1800]    0F66: BF 13 01                              	LEA DI, LEFT
+[1801]    0F69: 8B 45 06                              	MOV AX, [DI+6]
+[1802]    0F6C: 89 44 06                              	MOV [SI+6], AX
+[1803]    0F6F: 8B 45 04                              	MOV AX, [DI+4]
+[1804]    0F72: 89 44 04                              	MOV [SI+4], AX
+[1805]        :                                       ;/**
+[1806]    0F75: A1 37 01                              	MOV AX, TEMP0
+[1807]    0F78: 89 45 06                              	MOV [DI+6], AX
+[1808]    0F7B: A1 33 01                              	MOV AX, TEMP1
+[1809]    0F7E: 89 45 04                              	MOV [DI+4], AX
+[1810]        :                                       	
+[1811]        :                                       	;/down SIDE ROTATE*/
+[1812]    0F81: BE 2B 01                              	LEA SI, DOWN
+[1813]    0F84: 8B 04                                 	MOV AX, [SI]
+[1814]    0F86: A3 33 01                              	MOV TEMP1, AX ; TEMP1 = U0
+[1815]    0F89: 8B 44 06                              	MOV AX, [SI+6] ; AX = U1
+[1816]    0F8C: 89 04                                 	MOV [SI], AX  ; U0 = AX = U1
+[1817]    0F8E: 8B 44 04                              	MOV AX, [SI+4] ; AX = U2
+[1818]    0F91: 89 44 06                              	MOV  [SI+6], AX ; U1 = U2 = AX
+[1819]    0F94: 8B 44 02                              	MOV AX, [SI+2]
+[1820]    0F97: 89 44 04                              	MOV [SI+4], AX ; U2 = U3 = AX
+[1821]    0F9A: A1 33 01                              	MOV AX, TEMP1 ; AX = T1 = U0
+[1822]    0F9D: 89 44 02                              	MOV [SI+2], AX ; U3 = U0 = AX
+[1823]        :                                       	;/********/
+[1824]    0FA0: B8 44 00                              	mov Ax, 'D'
+[1825]    0FA3: E8 C7 F8                              	call SaveMoves
+[1826]    0FA6: E8 B1 F8                              	call Checker
+[1827]        :                                       	;/********/
+[1828]    0FA9: 5F                                    	POP DI
+[1829]    0FAA: 5E                                    	POP SI
+[1830]    0FAB: 5A                                    	POP DX
+[1831]    0FAC: 59                                    	POP CX
+[1832]    0FAD: 5B                                    	POP BX
+[1833]    0FAE: 58                                    	POP AX
+[1834]    0FAF: C3                                    	RET
+[1835]        :                                       D ENDP
+[1836]        :                                       ;/*********/
+[1837]    0FB0:                                       MAINEXIT8:
+[1838]        :                                       
+[1839]        :                                       ;/********/
+[1840]        :                                       END MAIN
+[1841]        :                                       
+[1842]        :                                       
+[1843]        :                                       
+[1844]        :                                       
+[1845]        :                                       
+[1846]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
