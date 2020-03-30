@@ -8,6 +8,13 @@ public class Cube {
     private int[] f = new int[4];
     private int[] b = new int[4];
 
+    private final int YELLOW = 'y';
+    private final int WHITE  = 'w';
+    private final int ORANGE = 'o';
+    private final int RED    = 'r';
+    private final int BLUE   = 'b';
+    private final int GREEN  = 'g';
+
     private char[] moves = new char[1000];
     private int movesPos = 0;
 
