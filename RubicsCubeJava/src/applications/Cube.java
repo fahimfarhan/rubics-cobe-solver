@@ -20,7 +20,7 @@ public class Cube {
 
     public Cube(){}
 
-    private void movU () {
+    private void U () {
         int temp0 = f[0];
         int temp1 = f[1];
 
@@ -42,7 +42,7 @@ public class Cube {
         moves[movesPos] = 'U';
         movesPos++;
     }
-    private void movUi () {
+    private void Ui () {
         int temp0 = f[0];
         int temp1 = f[1];
 
@@ -64,7 +64,7 @@ public class Cube {
         moves[movesPos] = 'u';
         movesPos++;
     }
-    private void movD () {
+    private void D () {
         int temp3 = f[3];
         int temp2 = f[2];
 
@@ -86,7 +86,7 @@ public class Cube {
         moves[movesPos] = 'D';
         movesPos++;
     }
-    private void movDi () {
+    private void Di () {
         int temp3 = f[3];
         int temp2 = f[2];
 
@@ -108,7 +108,7 @@ public class Cube {
         moves[movesPos] = 'd';
         movesPos++;
     }
-    private void movL () {
+    private void L () {
         int temp0 = u[0];
         int temp3 = u[3];
 
@@ -130,7 +130,7 @@ public class Cube {
         moves[movesPos] = 'L';
         movesPos++;
     }
-    private void movLi () {
+    private void Li () {
         int temp0 = u[0];
         int temp3 = u[3];
 
@@ -152,7 +152,7 @@ public class Cube {
         moves[movesPos] = 'l';
         movesPos++;
     }
-    private void movR () {
+    private void R () {
         int temp1 = u[1];
         int temp2 = u[2];
 
@@ -174,7 +174,7 @@ public class Cube {
         moves[movesPos] = 'R';
         movesPos++;
     }
-    private void movRi () {
+    private void Ri () {
         int temp1 = u[1];
         int temp2 = u[2];
 
@@ -196,7 +196,7 @@ public class Cube {
         moves[movesPos] = 'r';
         movesPos++;
     }
-    private void movF () {
+    private void F () {
         int temp3 = u[3];
         int temp2 = u[2];
 
@@ -212,7 +212,7 @@ public class Cube {
         moves[movesPos] = 'F';
         movesPos++;
     }
-    private void movFi () {
+    private void Fi () {
         int temp3 = u[3];
         int temp2 = u[2];
 
@@ -228,7 +228,7 @@ public class Cube {
         moves[movesPos] = 'f';
         movesPos++;
     }
-    private void movB () {
+    private void B () {
         int temp0 = u[0];
         int temp1 = u[1];
 
@@ -244,7 +244,7 @@ public class Cube {
         moves[movesPos] = 'B';
         movesPos++;
     }
-    private void movBi () {
+    private void Bi () {
         int temp0 = u[0];
         int temp1 = u[1];
 
@@ -259,6 +259,57 @@ public class Cube {
 
         moves[movesPos] = 'b';
         movesPos++;
+    }
+
+    private boolean placeCorner1FromUpperSide() {
+        for(int i=0; i<4; i++){// while(true){
+            if( (u[0] == WHITE) && (l[0] == GREEN) ){
+                U();B();B();
+                return true;
+            }else{
+                U();
+            }
+        }
+
+        for(int i=0; i<4; i++){
+            if( (l[0] == WHITE) && (b[1] == GREEN) ){
+                B();
+                return true;
+            }else{
+                U();
+            }
+        }
+
+        for(int i=0; i<4; i++){
+            if( (b[1] == WHITE) && (u[0]==GREEN) ){
+                Li();
+                return true;
+            }else{
+                U();
+            }
+        }
+        return false;
+    }
+
+    private boolean placeCorner1() {
+        boolean b = placeCorner1FromUpperSide();
+        if(b){
+            return b;
+        }else{
+            if( (d[3] == WHITE) && (l[3] == ORANGE) ){
+                return true;
+            }else{
+                R(); R(); L(); L();
+                return placeCorner1FromUpperSide();
+            }
+        }
+    }
+
+    private boolean placeAnotherCorner() {
+        boolean bool = false;
+
+
+        return false;
     }
 
 }
