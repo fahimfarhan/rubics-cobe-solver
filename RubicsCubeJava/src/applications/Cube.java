@@ -1,461 +1,257 @@
 package applications;
 
-/**
- * Created by Qazi Fahim Farhan on 30/3/2020
- */
 public class Cube {
-    /*color*/
-    final char white = 'W' ;
-    final char blue = 'B';
-    final char red = 'R';
-    final char yellow = 'Y';
-    final char green = 'G';
-    final char orange = 'O';
+    private int[] u = new int[4];
+    private int[] d = new int[4];
+    private int[] l = new int[4];
+    private int[] r = new int[4];
+    private int[] f = new int[4];
+    private int[] b = new int[4];
 
-    /*color*/
-    char up[][], down[][], left[][], right[][],back[][], front[][], temp[], temp1;
-    /*up ==white, front=green, left=orange, right= red, back = blue, down = yellow*/
-    /*constructor*/
-    Cube(){
-        up = new char[2][2];
-        down = new char[2][2];
-        left = new char[2][2];
-        right = new char[2][2];
-        front = new char[2][2];
-        back = new char[2][2];
-        temp = new char[2];
+    private char[] moves = new char[1000];
+    private int movesPos = 0;
 
-        for(int i=0; i<2; i++)
-            for(int j=0; j<2; j++){
+    public Cube(){}
 
-                up[i][j] = yellow;
-                front[i][j]= green;
-                left[i][j]=red;
-                right[i][j]=orange;
-                back[i][j]=blue;
-                down[i][j]=white;
-            }
+    private void movU () {
+        int temp0 = f[0];
+        int temp1 = f[1];
+
+        f[0] = r[0];
+        f[1] = r[1];
+        r[0] = b[0];
+        r[1] = b[1];
+        b[0] = l[0];
+        b[1] = l[1];
+        l[0] = temp0;
+        l[1] = temp1;
+
+        temp0 = u[3];
+        u[3] = u[2];
+        u[2] = u[1];
+        u[1] = u[0];
+        u[0] = temp0;
+
+        moves[movesPos] = 'U';
+        movesPos++;
     }
-    /**
-     * update 1
-     * Step1: the stndard moves
-     * */
+    private void movUi () {
+        int temp0 = f[0];
+        int temp1 = f[1];
 
-    void Ui(){
+        f[0] = l[0];
+        f[1] = l[1];
+        l[0] = b[0];
+        l[1] = b[1];
+        b[0] = r[0];
+        b[1] = r[1];
+        r[0] = temp0;
+        r[1] = temp1;
 
-        temp[0] = back[0][0];
-        temp[1] = back[0][1];
+        temp0 = u[0];
+        u[0] = u[1];
+        u[1] = u[2];
+        u[2] = u[3];
+        u[3] = temp0;
 
-        back[0][0] = right[0][0];
-        back[0][1] = right[0][1];
-
-        right[0][0]=front[0][0];
-        right[0][01]=front[0][01];
-
-        front[0][0]=left[0][0];
-        front[0][01]=left[0][01];
-
-        left[0][0]=temp[0];
-        left[0][1]=temp[1];
-        /**
-         * top side rotate
-         * */
-        temp1 = up[0][0];
-        up[0][0] = up[0][01];
-        up[0][01] = up[01][01];
-        up[01][01] = up[01][0];
-        up[01][0] = temp1;
-
+        moves[movesPos] = 'u';
+        movesPos++;
     }
+    private void movD () {
+        int temp3 = f[3];
+        int temp2 = f[2];
 
-    void U(){
-        temp[0] = back[0][0];
-        temp[1] = back[0][1];
+        f[3] = l[3];
+        f[2] = l[2];
+        l[3] = b[3];
+        l[2] = b[2];
+        b[3] = r[3];
+        b[2] = r[2];
+        r[3] = temp3;
+        r[2] = temp2;
 
-        back[0][0] = left[0][0];
-        back[0][1] = left[0][1];
+        temp3 = u[3];
+        u[3] = u[2];
+        u[2] = u[1];
+        u[1] = u[0];
+        u[0] = temp3;
 
-        left[0][0]=front[0][0];
-        left[0][01]=front[0][01];
-
-        front[0][0]=right[0][0];
-        front[0][01]=right[0][01];
-
-        right[0][0]=temp[0];
-        right[0][01]=temp[01];
-        /**
-         * top side rotate
-         * */
-        temp1 = up[0][0];
-        up[0][0] = up[01][0];
-        up[01][0] = up[01][01];
-        up[01][01] = up[0][01];
-        up[0][01] = temp1;
-
+        moves[movesPos] = 'D';
+        movesPos++;
     }
+    private void movDi () {
+        int temp3 = f[3];
+        int temp2 = f[2];
 
-    void D(){
+        f[3] = r[3];
+        f[2] = r[2];
+        r[3] = b[3];
+        r[2] = b[2];
+        b[3] = l[3];
+        b[2] = l[2];
+        l[3] = temp3;
+        l[2] = temp2;
 
-        temp[0] = back[1][0];
-        temp[1] = back[1][1];
+        temp3 = d[0];
+        d[0] = d[1];
+        d[1] = d[2];
+        d[2] = d[3];
+        d[3] = temp3;
 
-        back[01][0] = right[01][0];
-        back[01][1] = right[01][1];
-
-        right[01][0]=front[01][0];
-        right[01][01]=front[01][01];
-
-        front[01][0]=left[01][0];
-        front[01][01]=left[01][01];
-
-        left[01][0]=temp[0];
-        left[01][01]=temp[01];
-        /**
-         * down side rotate
-         * */
-        temp1 = down[0][0];
-        down[0][0] = down[01][0];
-        down[01][0] = down[01][01];
-        down[01][01] = down[0][01];
-        down[0][01] = temp1;
-
-
+        moves[movesPos] = 'd';
+        movesPos++;
     }
+    private void movL () {
+        int temp0 = u[0];
+        int temp3 = u[3];
 
-    void Di(){
+        u[0] = b[2];
+        u[3] = b[1];
+        b[2] = d[0];
+        b[1] = d[3];
+        d[0] = f[0];
+        d[3] = f[3];
+        f[0] = temp0;
+        f[1] = temp3;
 
-        temp[0] = back[01][0];
-        temp[1] = back[01][1];
+        temp3 = l[3];
+        l[3] = l[2];
+        l[2] = l[1];
+        l[1] = l[0];
+        l[0] = temp3;
 
-        back[01][0] = left[01][0];
-        back[01][1] = left[01][1];
-
-        left[01][0]=front[01][0];
-        left[01][01]=front[01][01];
-
-        front[01][0]=right[01][0];
-        front[01][01]=right[01][01];
-
-        right[01][0]=temp[0];
-        right[01][01]=temp[01];
-        /**
-         * down side rotate
-         * */
-
-        temp1 = down[0][0];
-        down[0][0] = down[0][01];
-        down[0][01] = down[01][01];
-        down[01][01] = down[01][0];
-        down[01][0] = temp1;
-
+        moves[movesPos] = 'L';
+        movesPos++;
     }
+    private void movLi () {
+        int temp0 = u[0];
+        int temp3 = u[3];
 
-    void Li(){
+        u[0] = f[0];
+        u[3] = f[3];
+        f[0] = d[0];
+        f[3] = d[3];
+        d[0] = b[2];
+        d[3] = b[1];
+        b[2] = temp0;
+        b[1] = temp3;
 
-        temp[0] = back[0][1];
-        temp[1] = back[1][1];
+        temp0 = l[0];
+        l[0] = l[1];
+        l[1] = l[2];
+        l[2] = l[3];
+        l[3] = temp0;
 
-        back[1][1]=up[0][0];
-        back[0][1]=up[1][0];
-
-        up[0][0]=front[0][0];
-        up[01][0]=front[1][0];
-
-        front[0][0]=down[0][0];
-        front[1][0]=down[1][0];
-
-        down[0][0] = temp[1];
-        down[1][0] = temp[0];
-
-        /*left side rotate*/
-        temp1 = left[0][0];
-        left[0][0] = left[0][1];
-        left[0][1] = left[1][1];
-        left[1][1] = left[1][0];
-        left[1][0] = temp1;
+        moves[movesPos] = 'l';
+        movesPos++;
     }
+    private void movR () {
+        int temp1 = u[1];
+        int temp2 = u[2];
 
-    void L(){
+        u[1] = f[1];
+        u[2] = f[2];
+        f[1] = d[1];
+        f[2] = d[2];
+        d[1] = b[3];
+        d[2] = b[0];
+        b[3] = temp1;
+        b[0] = temp2;
 
-        temp[0] = back[0][1];
-        temp[1] = back[1][1];
+        temp1 = r[3];
+        r[3] = r[2];
+        r[2] = r[1];
+        r[1] = r[0];
+        r[0] = temp1;
 
-        back[1][1]=down[0][0];
-        back[0][1]=down[1][0];
-
-        down[0][0]=front[0][0];
-        down[01][0]=front[1][0];
-
-        front[0][0]=up[0][0];
-        front[1][0]=up[1][0];
-
-        up[0][0] = temp[1];
-        up[1][0] = temp[0];
-
-        /*left sode rotate*/
-
-        temp1 = left[0][0];
-        left[0][0] = left[1][0];
-        left[1][0] = left[1][1];
-        left[1][1] = left[0][1];
-        left[0][1] = temp1;
-
+        moves[movesPos] = 'R';
+        movesPos++;
     }
+    private void movRi () {
+        int temp1 = u[1];
+        int temp2 = u[2];
 
-    void R(){
+        u[1] = b[3];
+        u[2] = b[0];
+        b[3] = d[1];
+        b[0] = d[2];
+        d[1] = f[1];
+        d[2] = f[2];
+        f[1] = temp1;
+        f[2] = temp2;
 
-        temp[0] = back[0][0];
-        temp[1] = back[1][0];
+        temp1 = r[0];
+        r[0] = r[1];
+        r[1] = r[2];
+        r[2] = r[3];
+        r[3] = temp1;
 
-        back[0][0]=up[1][1];
-        back[1][0]=up[0][01];
-
-        up[0][01]=front[0][01];
-        up[01][01]=front[1][01];
-
-        front[0][01]=down[0][01];
-        front[1][01]=down[1][01];
-
-        down[0][01] = temp[1];
-        down[1][01] = temp[0];
-        /**
-         * right side rotate*/
-        temp1 = right[0][0];
-        right[0][0] = right[1][0];
-        right[1][0] = right[1][1];
-        right[1][1] = right[0][1];
-        right[0][1] = temp1;
+        moves[movesPos] = 'r';
+        movesPos++;
     }
+    private void movF () {
+        int temp3 = u[3];
+        int temp2 = u[2];
 
-    void Ri(){
-        temp[0] = back[0][0];
-        temp[1] = back[1][0];
+        u[3] = l[2];
+        u[2] = l[1];
+        l[2] = d[1];
+        l[1] = d[0];
+        d[1] = r[0];
+        d[0] = r[3];
+        r[0] = temp3;
+        r[3] = temp2;
 
-        back[0][0]=down[1][1];
-        back[1][0]=down[0][1];
-
-        down[0][01]=front[0][01];
-        down[01][01]=front[1][01];
-
-        front[0][01]=up[0][01];
-        front[1][01]=up[1][01];
-
-        up[0][01] = temp[1];
-        up[1][01] = temp[0];
-        /**
-         * right side rotate*/
-        temp1 = right[0][0];
-        right[0][0] = right[0][1];
-        right[0][1] = right[1][1];
-        right[1][1] = right[1][0];
-        right[1][0] = temp1;
+        moves[movesPos] = 'F';
+        movesPos++;
     }
+    private void movFi () {
+        int temp3 = u[3];
+        int temp2 = u[2];
 
-    void F(){
+        u[3] = r[0];
+        u[2] = r[3];
+        r[0] = d[1];
+        r[3] = d[0];
+        d[1] = l[2];
+        d[0] = l[1];
+        l[2] = temp3;
+        l[1] = temp2;
 
-        temp[0] = up[1][0];
-        temp[1] = up[1][1];
-
-        up[1][0] = left[1][1];
-        up[1][1] = left[0][1];
-
-        left[0][1] = down[0][0];
-        left[1][1] = down[0][1];
-
-        down[0][0] = right[0][0];
-        down[0][1] = right[1][0];
-
-        right[0][0] = temp[0];
-        right[1][0] = temp[1];
-
-        /*front rotate*/
-        temp1 = front[0][0];
-        front[0][0] = front[1][0];
-        front[1][0] = front[1][1];
-        front[1][1] = front[0][1];
-        front[0][1] = temp1;
+        moves[movesPos] = 'f';
+        movesPos++;
     }
+    private void movB () {
+        int temp0 = u[0];
+        int temp1 = u[1];
 
-    void Fi(){
+        u[0] = r[1];
+        u[1] = r[2];
+        r[1] = d[2];
+        r[2] = d[3];
+        d[2] = l[3];
+        d[3] = l[0];
+        l[3] = temp0;
+        l[0] = temp1;
 
-        temp[0] = up[1][0];
-        temp[1] = up[1][1];
-
-        up[1][0] = right[0][0];
-        up[1][1] = right[1][0];
-
-        right[0][0] = down[0][0];
-        right[1][0] = down[0][1];
-
-        down[0][0] = left[0][1];
-        down[0][1] = left[1][1];
-
-        left[0][1] = temp[0];
-        left[1][1] = temp[1];
-
-        /*front rotate*/
-        temp1 = front[0][0];
-        front[0][0] = front[0][1];
-        front[0][1] = front[1][1];
-        front[1][1] = front[1][0];
-        front[1][0] = temp1;
+        moves[movesPos] = 'B';
+        movesPos++;
     }
+    private void movBi () {
+        int temp0 = u[0];
+        int temp1 = u[1];
 
-    void Bi(){
+        u[0] = l[3];
+        u[1] = l[0];
+        l[3] = d[2];
+        l[0] = d[3];
+        d[2] = r[1];
+        d[3] = r[2];
+        r[1] = temp0;
+        r[2] = temp1;
 
-        temp[0] = up[0][0];
-        temp[1] = up[0][1];
-
-        up[0][0] = left[1][0];
-        up[0][1] = left[0][0];
-
-        left[0][0] = down[1][0];
-        left[1][0] = down[1][1];
-
-        down[1][0] = right[1][1];
-        down[1][1] = right[0][1];
-
-        right[1][1] = temp[1];
-        right[0][1] = temp[0];
-
-        /*back rotate*/
-        temp1 = back[0][0];
-        back[0][0] = back[0][1];
-        back[0][1] = back[1][1];
-        back[1][1] = back[1][0];
-        back[1][0] = temp1;
+        moves[movesPos] = 'b';
+        movesPos++;
     }
-
-    void B(){
-
-        temp[0] = up[0][0];
-        temp[1] = up[0][1];
-
-        up[0][0] = right[0][1];
-        up[0][1] = right[01][01];
-
-        right[0][01] = down[1][01];
-        right[1][01] = down[1][0];
-
-        down[1][0] = left[0][0];
-        down[1][1] = left[1][0];
-
-        left[0][0] = temp[1];
-        left[1][0] = temp[0];
-
-        /*back rotate*/
-        temp1 = back[0][0];
-        back[0][0] = back[1][0];
-        back[1][0] = back[1][1];
-        back[1][1] = back[0][1];
-        back[0][1] = temp1;
-
-    }
-
-    void Printer(){
-        System.out.println("  "+""+up[0][0]+""+up[0][1]);
-        System.out.println("  "+""+up[01][0]+""+up[01][1]);
-        System.out.println(""+left[0][0]+""+left[0][1]+""+front[0][0]+""+front[0][1]+""+right[0][0]+""+right[0][1]+""+back[0][0]+""+ back[0][1]);
-        System.out.println(""+left[01][0]+""+left[01][1]+""+front[01][0]+""+front[01][1]+""+right[01][0]+""+right[01][1]+""+back[01][0]+""+back[01][1]);
-        System.out.println("  "+""+down[0][0]+""+down[0][1]);
-        System.out.println("  "+""+down[01][0]+""+down[01][1]);
-        System.out.println("\n");
-    }
-
-    /**
-     * update 2
-     * Step 2: implement the moves by creating algorithms   OLL, PLL
-     * */
-    /*2x2x2 OLL test prototype*/
-
-    void Sune(){/*(RURi) U (RU2Ri)*/R();U();Ri(); U(); R();U();U();Ri();}
-
-    void AntiSune() /* (Ri Ui R) Ui (Ri U2i R)*/ {    Ri(); Ui(); R(); Ui(); Ri(); Ui(); Ui(); R();}
-
-    void Headlights()   /* F U R Ui Ri Fi */ {      F();U(); R(); Ui(); Ri();Fi();  }
-    void Chamelion()/* (R U Ri Ui) (Ri F R Fi) */ {   R(); U(); Ri(); Ui(); Ri(); F(); R(); Fi();}
-
-    void DiagonalCorners()/* Fi (R U Ri Ui) Ri F R*/ {   Fi(); R(); U(); Ri(); Ui(); Ri(); F(); R();}
-
-    void Symmetric()/* R2 U2 R U2 R2*/ { R();R(); U();U();R();U();U();R();R(); }
-
-    void NonSymetric()/*F (R U Ri Ui)(R U Ri Ui ) Fi*/ { F();R();U();Ri();Ui(); R();U();Ri();Ui(); Fi();}
-
-    /*2x2x2 PLL test prototype| U face only plls*/
-    void Adjacent()/* (R U2 Ri Ui) (R U2) (Li U Ri Ui L)*/ {   R();U();U();Ri();Ui();R();U();U(); Li();U();Ri();Ui();L();  }
-
-    void Diagonal()/*(R Ui Ri Ui F2 UI)(RURi)D R2*/ {R();Ui();Ri();Ui();F();F();Ui();R();U();Ri();D();R();R();}
-
-    /*EXTRAs: U and D face PLL*/
-    void BothDiagonal()/* r2 f2 r2*/ {   R();R();F();F();R();R();    }
-    void U_AdjacentD_Diagonal()/*(r ui r) f2 (ri u ri)*/{   R();Ui();R(); F();F();Ri();U();Ri();    }
-
-    //void BothAdjacent(){} //unimplementable due to lack of functions!!! :o
-    /**
-     * update 3
-     * the case checkers
-     * */
-    void OLL(){
-        //int GetColor;
-        /** up , down, left, right, front, back*/
-        //GetColor= up[1][0];
-        if(back[0][1]==up[1][0] && right[0][1] == up[1][0] && front[0][1] == up[1][0]) {
-            Sune();
-        }else if(up[0][0] == back[0][0] && up[0][0]== right[0][0] && up[0][0]==front[0][0]){
-            AntiSune();
-        }else if(up[0][0] == up[1][0] && up[0][0] == right[0][0] && up[0][0] == right[0][1]){
-            Headlights();
-        }else if(up[0][1] == up[1][1] && back[0][1] == up[1][1] && front[0][0] == up[1][1]){
-            Chamelion();
-        }else if(up[0][1] == up[1][0] && left[0][0] == up[0][1] && front[0][1] == up[1][0]){
-            DiagonalCorners();
-        }else if(front[0][0] == front[0][1] && back[0][0] == back[0][1] && front[0][0] == back[0][0]){
-            Symmetric();
-        }else if(left[0][0] == left[0][1] && back[0][0] == front[0][1] && front[0][1] == left[0][0]){
-            NonSymetric();
-        }else{      System.out.println("Error! No cases of the OLL matches! :o");   }
-    }
-    void PLL(){
-        /**ami asolei bujhtesi na j kokhon Adjacent, kokhon diagonal use korbo! :o*/
-    }
-    void InputViaFile(String s){
-        System.out.println(s.length());
-        System.out.println(s);
-        for(int i=0; i<24; i++)
-            System.out.print(s.charAt(i));
-        System.out.println();
-        up[0][0] = s.charAt(0);
-        up[0][1] = s.charAt(1);
-        up[1][0] = s.charAt(2);
-        up[1][1] = s.charAt(3);
-
-        down[0][0] = s.charAt(4);
-        down[0][1] = s.charAt(5);
-        down[1][0] = s.charAt(6);
-        down[1][1] = s.charAt(7);
-
-        left[0][0] = s.charAt(8);
-        left[0][1] = s.charAt(9);
-        left[1][0] = s.charAt(10);
-        left[1][1] = s.charAt(11);
-
-        right[0][0] = s.charAt(12);
-        right[0][1] = s.charAt(13);
-        right[1][0] = s.charAt(14);
-        right[1][1] = s.charAt(15);
-
-        front[0][0] = s.charAt(16);
-        front[0][1] = s.charAt(17);
-        front[1][0] = s.charAt(18);
-        front[1][1] = s.charAt(19);
-
-        back[0][0] = s.charAt(20);
-        back[0][1] = s.charAt(21);
-        back[1][0] = s.charAt(22);
-        back[1][1] = s.charAt(23);
-
-
-    }
-
 
 }
