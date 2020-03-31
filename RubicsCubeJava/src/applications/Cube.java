@@ -17,7 +17,9 @@ public class Cube {
     private final int BLUE   = 'b';
     private final int GREEN  = 'g';
 
-    private char[] moves = new char[1000];
+
+    private final int MAX_LIMIT = 5000;
+    private char[] moves = new char[MAX_LIMIT];
     private int movesPos = 0;
 
     public Cube(){}
@@ -429,4 +431,212 @@ public class Cube {
         return false;
     }
 
+    private boolean doOLL() {
+        //look for the number of yellow colours on upper side
+        int yellowsOnUp = 0;
+        for (int i=0 ; i<4 ; i++) {if (u[i]==YELLOW) {yellowsOnUp++;}}
+        if (yellowsOnUp==0) {
+            //search for symmetric and non-symmetric
+            while (f[1]!=YELLOW) {U();}
+            if (b[1]==YELLOW) {
+                //case symmetric
+                System.out.println("symmetric");
+                //algo
+                R();R();U();U();
+                R();U();U();R();R();
+                return true;
+            }
+            else {
+                //case non-symmetric
+                System.out.println("non-symmetric");
+                //setup move
+                if (f[0]==YELLOW) {U();}
+                //algo
+                F();
+                R();U();Ri();Ui();
+                R();U();Ri();Ui();
+                Fi();
+                return true;
+            }
+        }
+        else if (yellowsOnUp==1) {
+            //search for sune and anti-sune
+            //first search for sune
+            if (f[1]==YELLOW) {
+                //case sune
+                System.out.println("sune");
+                //setup moves
+                while (u[3]!=YELLOW) {Ui();}
+                //algo
+                R();U();Ri();U();
+                R();U();U();Ri();
+                return true;
+            }
+            //again search for sune
+            U();
+            if (f[1]==YELLOW) {
+                //case sune
+                System.out.println("sune");
+                //setup moves
+                while (u[3]!=YELLOW) {Ui();}
+                //algo
+                R();U();Ri();U();
+                R();U();U();Ri();
+                return true;
+            }
+            else {
+                //if still doOLL() is not returned, the case is surely antisune
+                System.out.println("antisune");
+                //setup moves
+                while (u[0]!=YELLOW) {U();}
+                //algo
+                Ri();Ui();R();Ui();
+                Ri();Ui();Ui();R();
+                return true;
+            }
+        }
+        else if (yellowsOnUp==2) {
+            //search for headlight, chameleon or diagonal corners
+            while (f[1]!=YELLOW) {U();}
+            if (l[0]==YELLOW) {
+                //case diagonal corners
+                System.out.println("diagonal corners");
+                //algo
+                Fi();
+                R();U();Ri();Ui();
+                Ri();F();R();
+                return true;
+            }
+            if (b[0]==YELLOW) {
+                //case chameleon
+                System.out.println("chameleon");
+                //setup moves
+                U();
+                U();
+                //algo
+                R();U();Ri();Ui();
+                Ri();F();R();Fi();
+                return true;
+            }
+            else {
+                //case headlight
+                System.out.println("headlight");
+                //setup moves
+                Ui();
+                //algo
+                F();U();R();
+                Ui();Ri();Fi();
+                return true;
+            }
+        }
+        else if (yellowsOnUp==4) {
+            //OLL skip!
+            return true;
+        }
+        return false;
+    }
+    private boolean doPLL() {
+        //first look for adjacent
+        for (int i=0 ; i<4 ; i++) {
+            if (l[0]==l[1]) {
+                if (r[0]==r[1]) {
+                    return true; //PLL skip!
+                }
+                //yes adjacent, apply T perm
+                System.out.println("adjacent");
+                R();U();Ri();Ui();
+                Ri();F();R();R();
+                Ui();Ri();Ui();R();
+                U();Ri();Fi();
+                //finish through Ups!
+                while (f[0]!=f[3]) {U();	}
+                return true;
+            }
+            else {U();}
+        }
+        //unnecessary 4 U moves, so--
+        movesPos -= 4;
+        //and as still not returned, it must be diagonal case
+        System.out.println("diagonal");
+        R();Ui();Ri();Ui();F();
+        F();Ui();R();U();Ri();
+        D();R();R();
+        //finish through Ups!
+        while (f[0]!=f[3]) {U();	}
+        return true;
+    }
+
+
+    /**
+     * u -> white
+     * l -> orange
+     * f -> green
+     * r -> red
+     * b-> yellow
+     * d -> blue
+     * */
+
+    public void start(){
+        initCube();
+        printer();
+        printMoves();
+        randomShuffle();
+        printer();
+        printMoves();
+        resetMoves();
+        printer();
+        printMoves();
+
+        placeCorner1();
+        placeAnotherCorner();
+        placeAnotherCorner();
+        placeAnotherCorner();
+
+        doOLL();
+        doPLL();
+
+        printer();
+        printMoves();
+    }
+
+    public void initCube(){
+        for(int i=0; i<4; i++){
+            u[i] = WHITE;
+            l[i] = RED;
+            f[i] = GREEN;
+            r[i] = ORANGE;
+            b[i] = YELLOW;
+            d[i] = BLUE;
+        }
+    }
+
+    public void randomShuffle(){
+        L();U();F();B(); D();Li();
+        Ui();Di();Ri();Li();
+    }
+
+    public void resetMoves(){
+        movesPos = 0;
+        for(int i=0; i<MAX_LIMIT; i++){
+            moves[i] = 0;
+        }
+    }
+
+    public void printer(){
+        System.out.println("  "+(char)u[0]+""+(char)u[1]);
+        System.out.println("  "+(char)u[3]+""+(char)u[2]);
+        System.out.println(""+(char)l[0]+""+(char)l[1]+""+(char)f[0]+""+(char)f[1]+""+(char)r[0]+""+(char)r[1]+""+(char)b[0]+""+(char)b[1]);
+        System.out.println(""+(char)l[3]+""+(char)l[2]+""+(char)f[3]+""+(char)f[2]+""+(char)r[3]+""+(char)r[2]+""+(char)b[3]+""+(char)b[2]);
+        System.out.println("  "+(char)d[0]+""+(char)d[1]);
+        System.out.println("  "+(char)d[3]+""+(char)d[2]);
+    }
+
+    public void printMoves(){
+        System.out.println("********************************************");
+        for(int i=0; i<=movesPos; i++){
+            System.out.print(moves[i]+" ");
+        }
+        System.out.println("");
+        System.out.println("********************************************");
+    }
 }
