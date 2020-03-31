@@ -33,7 +33,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.JavaFX" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunManager" selected="Application.Main (1)">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -103,5 +103,9 @@
       <screen x="0" y="0" width="1366" height="734" />
     </state>
     <state width="1324" height="174" key="GridCell.Tab.0.right/0.0.1366.734@0.0.1366.734" timestamp="1585579796859" />
+    <state x="327" y="2" width="1007" height="732" key="SettingsEditor" timestamp="1585630239556">
+      <screen x="0" y="0" width="1366" height="734" />
+    </state>
+    <state x="327" y="2" width="1007" height="732" key="SettingsEditor/0.0.1366.734@0.0.1366.734" timestamp="1585630239556" />
   </component>
 </project>

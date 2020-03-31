@@ -308,9 +308,47 @@ public class Cube {
     }
 
     private boolean placeAnotherCorner() {
-        boolean bool = false;
+        boolean bool = placeAnotherCornerFromUpperSide();
 
+        if(!bool){
+            // try recovering
+            if( (f[3] == WHITE) || (l[2] == WHITE) ){
+                // if_pac_11
+                Li(); Ui(); L();
+                return placeAnotherCornerFromUpperSide();
+            }else if( (d[0] == WHITE) && (f[3] != BLUE) ) {
+                // if_pac_12
+                Li(); Ui(); L();
+                return placeAnotherCornerFromUpperSide();
+            }               // if_pac_13
+            else if( (f[2] == WHITE) || (r[3] == WHITE)){
+                // 14
+                R();
+                U();
+                Ri();
+                return placeAnotherCornerFromUpperSide();
+            }else if( (d[1] == WHITE) && (r[3]!=RED) ){
+                // 15
+                Fi();Ui();F();U();
+                return placeAnotherCornerFromUpperSide();
+            }else if( (r[2] == WHITE) || (b[3] == WHITE) ){
+                // 17
+                Ri();U();R();U();
+                return placeAnotherCornerFromUpperSide();
+            }else if( (d[2] == WHITE) && (b[3] != GREEN) ){
+                // 18
+                Ri();
+                Ui();
+                Ui();
+                R();
+                U();
+                return placeAnotherCornerFromUpperSide();
+            }
 
+        }else{
+            // direct return true
+            return true;
+        }
         return false;
     }
 
