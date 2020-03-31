@@ -1,5 +1,7 @@
 package applications;
 
+import com.sun.org.apache.regexp.internal.RE;
+
 public class Cube {
     private int[] u = new int[4];
     private int[] d = new int[4];
@@ -307,6 +309,83 @@ public class Cube {
 
     private boolean placeAnotherCorner() {
         boolean bool = false;
+
+
+        return false;
+    }
+
+    private boolean placeAnotherCornerFromUpperSide() {
+
+        for(int k1=0; k1<4; k1++){
+            if(r[0] == WHITE){
+                if(u[2] == BLUE){
+                    U();F();U();Fi();
+                    // return_pacfus =? return true/false
+                    return true;
+                }
+                // else_pacfus_11
+                else if(u[2] == GREEN){
+                    Ui(); B(); U(); Bi();
+                    return true;
+                }else if(u[2] == RED){ // else_pacfus_12
+                    R(); U(); Ri();
+                    return true;
+                }
+//                else{
+//                    // pacfus_13
+//                }
+            }else{
+                // else_pacfus_1
+                U();
+            }
+        }
+
+        for(int i1=0; i1<4; i1++){
+            if(f[1] == WHITE){
+                if(u[2] == ORANGE){
+                    U(); Li(); Ui(); L();
+                    return true;
+                }else if(u[2]==RED){ // pacfus_21
+                    Ui(); Ri(); Ui();R();
+                    return true;
+                }else if(u[2] == BLUE ){ // pacfus_22
+                    Fi(); Ui(); F();
+                    return true;
+                }
+//                else {
+//                    // pacfus_23
+//                }
+            }else{
+                // else_pacfus_2
+                U();
+            }
+        }
+
+        for(int i1=0; i1<4; i1++){
+            if(u[2] == WHITE){
+                if(f[1] == BLUE){
+                    U(); Li(); U();L(); U(); U();
+                    Li();
+                    Ui(); // <--SHOW SOME RESPECT TO THIS UP INVERSE!
+                    L();
+                    return true;
+                }else if(f[1] == RED){
+                    // else_pacfus_31
+                    R(); Ui(); Ri();
+                    U(); U(); R();
+                    U(); Ri();
+                    return true;
+                }else if(f[1] == GREEN ){
+                    // else pacfus 32
+                    Ui(); Ri(); U(); R(); U();
+                    U(); Ri(); Ui(); R();
+                    return true;
+                }
+            }else{
+                // else_pacfus_3
+                U();
+            }
+        }
 
 
         return false;
